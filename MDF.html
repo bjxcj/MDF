@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>FY25-FY26 微信直充活动每小时销售对比</title>
+    <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000000;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .toolbar {
+            text-align: center;
+            margin-top: 20px;
+            position: fixed;
+            right: 0;
+            top: 0;
+            z-index: 9999;
+        }
+        .btn {
+            padding: 5px 10px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        .btn-primary {
+            background: #5470c6;
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: #4055a8;
+        }
+        .btn-success {
+            background: #91cc75;
+            color: #fff;
+        }
+        .btn-success:hover {
+            background: #76b05b;
+        }
+
+        #lineChart {
+            width: 100%;
+            height: 99vh;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 手机端适配 */
+        @media (max-width: 768px) {
+            .toolbar {
+                margin-top: 10px;
+                right: 5px;
+                top: 5px;
+            }
+            .btn {
+                padding: 4px 8px;
+                font-size: 12px;
+            }
+            #lineChart {
+                height: 95vh;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="lineChart"></div>
+<script>
+    const lineChart = echarts.init(document.getElementById('lineChart'));
+
+    // 颜色配置
+    const colorMap = {
+        '6元': '#FF22BB',
+        '10元': '#CC22FF',
+        '30元': '#4422FF',
+        '50元': '#CCFF00',
+        '68元': '#00AA66',
+        '100元': '#FFFFFF',
+        '128元': '#8822FF',
+        '198元': '#0055FF',
+        '200元': '#FF7700',
+        '300元': '#00CCCC',
+        '328元': '#00BBFF',
+        '400元': '#fac858',
+        '500元': '#FFDD00',
+        '527元': '#E062AE',
+        '648元': '#00DD22',
+        '700元': '#ff9f7f',
+        '1,000元': '#FF0000',
+        'other': '#FF5577'
+    };
+
+    // JSON文件名（与HTML文件同目录）
+    const DATA_FILE = 'data.json?v=' + new Date().getTime();
+
+    // 默认数据
+    let times = [];
+    let seriesData = {
+    };
+
+    // 加载JSON文件（返回数据但不更新图表）
+    async function loadDataFile() {
+        try {
+            const response = await fetch(DATA_FILE);
+            if (!response.ok) {
+                console.warn(`未找到 ${DATA_FILE}，使用默认数据`);
+                return false;
+            }
+            const data = await response.json();
+
+            if (data.times && data.seriesData) {
+                times = data.times;
+                seriesData = data.seriesData;
+                return true;
+            } else {
+                console.warn('JSON格式不正确');
+                return false;
+            }
+        } catch (error) {
+            console.error('加载数据失败:', error);
+            return false;
+        }
+    }
+
+    // 构建series数据
+    function buildSeries() {
+        return Object.keys(seriesData).map(name => ({
+            name: name,
+            type: 'line',
+            itemStyle: {
+                color: colorMap[name]
+            },
+            data: seriesData[name]
+        }));
+    }
+
+    // 更新图表
+    function updateChart() {
+        const series = buildSeries();
+        lineChart.setOption({
+            xAxis: { data: times },
+            series: series
+        });
+    }
+
+    // 检测是否为移动端
+    function isMobile() {
+        return window.innerWidth <= 768;
+    }
+
+    function initChart() {
+        const series = buildSeries();
+        const mobile = isMobile();
+        const option = {
+            backgroundColor: '#000000',
+            textStyle: {
+                color: '#ffffff',
+                fontFamily: 'Helvetica',
+                fontSize: mobile ? 12 : 14
+            },
+            title: {
+                text: 'FY25-FY26 微信直充活动每小时销售对比 (默认数据)',
+                left: 'center',
+                top: mobile ? 40 : 20,
+                textStyle: {
+                    color: '#ffffff',
+                    fontSize: mobile ? 14 : 16
+                }
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    label: {
+                        backgroundColor: '#6a7985'
+                    }
+                },
+                backgroundColor: 'rgba(50,50,50,0.9)',
+                borderColor: '#777',
+                borderWidth: 1,
+                textStyle: { color: '#fff' },
+                formatter: function(params) {
+                    let result = `<b>${params[0].axisValue}</b><br/>`;
+                    let total = 0;
+                    params.forEach(item => {
+                        if (item.value > 0) {
+                            result += `${item.marker} ${item.seriesName}: ${item.value}%<br/>`;
+                            total += item.value;
+                        }
+                    });
+                    return result;
+                }
+            },
+            legend: {
+                orient: 'horizontal',
+                left: 'center',
+                bottom: mobile ? '2%' : '2%',
+                top: 'auto',
+                itemGap: mobile ? 8 : 15,
+                itemWidth: mobile ? 20 : 25,
+                itemHeight: mobile ? 12 : 14,
+                textStyle: {
+                    color: '#ccc',
+                    fontSize: mobile ? 10 : 14
+                },
+                pageTextStyle: { color: '#fff' },
+                type: 'scroll'
+            },
+            grid: {
+                left: mobile ? '12%' : '3%',
+                right: mobile ? '5%' : '4%',
+                bottom: mobile ? '22%' : '15%',
+                top: mobile ? '18%' : '15%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: times,
+                axisLine: { lineStyle: { color: '#ffffff' } },
+                axisLabel: {
+                    color: '#ffffff',
+                    fontFamily: 'Helvetica',
+                    fontSize: mobile ? 10 : 14,
+                    rotate: mobile ? 45 : 0
+                },
+                splitLine: { show: false }
+            },
+            yAxis: {
+                type: 'value',
+                name: '活动销售占比',
+                nameLocation: 'end',
+                nameTextStyle: {
+                    align: 'right',
+                    color: '#ffffff',
+                    fontSize: mobile ? 10 : 12
+                },
+                axisLine: { lineStyle: { color: '#ffffff' } },
+                axisLabel: {
+                    color: '#ffffff',
+                    fontFamily: 'Helvetica',
+                    fontSize: mobile ? 10 : 14,
+                    formatter: function(value) {
+                        return value.toFixed(0)+"%";
+                    }
+                },
+                splitLine: { lineStyle: { color: '#333333' } }
+            },
+            series: series
+        };
+
+        lineChart.setOption(option);
+    }
+
+    // 先初始化图表，然后加载JSON数据更新
+    initChart(true);
+    loadDataFile().then((success) => {
+        if (success) {
+            updateChart();
+            // 更新标题
+            lineChart.setOption({
+                title: { text: 'FY25-FY26 微信直充活动每小时销售对比' }
+            });
+        }
+    });
+
+    function downloadImage() {
+        const url = lineChart.getDataURL({
+            type: 'png',
+            pixelRatio: 2,
+            backgroundColor: '#000000'
+        });
+        const link = document.createElement('a');
+        link.download = 'FY25-FY26 微信直充活动每小时销售对比.png';
+        link.href = url;
+        link.click();
+    }
+
+    function downloadSVG() {
+        const svgUrl = lineChart.getDataURL({
+            type: 'svg',
+            backgroundColor: '#000000'
+        });
+        const link = document.createElement('a');
+        link.download = 'FY25-FY26 微信直充活动每小时销售对比.svg';
+        link.href = svgUrl;
+        link.click();
+    }
+
+    // 监听窗口大小变化，移动端/桌面端切换时重新初始化
+    let lastIsMobile = isMobile();
+    window.addEventListener('resize', () => {
+        lineChart.resize();
+        const currentIsMobile = isMobile();
+        if (currentIsMobile !== lastIsMobile) {
+            lastIsMobile = currentIsMobile;
+            lineChart.clear();
+            initChart();
+        }
+    });
+</script>
+</body>
+</html>

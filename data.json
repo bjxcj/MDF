@@ -1,0 +1,8 @@
+{
+  "times": ["0", "第1小时","第2小时"],
+  "seriesData": {
+    "FY25 Labour Day holiday (start:9点)": [0,6.99, 21.64],
+    "FY25 summer holiday (start:10点)": [0,4.1, 21.53],
+    "FY26 June (start:10点)": [0,8.87, 21]
+  }
+}
