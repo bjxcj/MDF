@@ -246,12 +246,13 @@
             },
             yAxis: {
                 type: 'value',
-                name: '活动销售占比',
+                name: '销售占比',
                 nameLocation: 'end',
                 nameTextStyle: {
-                    align: 'right',
                     color: '#ffffff',
-                    fontSize: mobile ? 10 : 12
+                    fontSize: mobile ? 10 : 14,
+                    fontFamily: 'Helvetica',
+                    align: 'right'
                 },
                 axisLine: { lineStyle: { color: '#ffffff' } },
                 axisLabel: {
@@ -263,6 +264,17 @@
                     }
                 },
                 splitLine: { lineStyle: { color: '#333333' } }
+            },
+            graphic: {
+                type: 'text',
+                left: mobile ? 80 : 95,
+                y: mobile ? 104 : 108,
+                style: {
+                    text: '（2025-04-29全天销售额为100%）',
+                    fill: '#ffffff',
+                    fontSize: mobile ? 10 : 14,
+                    fontFamily: 'Helvetica'
+                }
             },
             series: series
         };
