@@ -6,7 +6,7 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>FY25-FY26 微信直充活动每小时销售对比</title>
+    <title>FY25-FY26 微信直充活动销售对比</title>
     <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
     <style>
         * {
@@ -164,6 +164,7 @@
         return Object.keys(seriesData).map(name => ({
             name: name,
             type: 'line',
+            symbolSize: 6,
             itemStyle: {
                 color: colorMap[name]
             },
@@ -176,6 +177,7 @@
         return Object.keys(followerSeriesData).map(name => ({
             name: name,
             type: 'line',
+            symbolSize: 6,
             itemStyle: {
                 color: '#FFDB5C'
             },
@@ -215,7 +217,7 @@
                 fontSize: mobile ? 12 : 14
             },
             title: {
-                text: 'FY25-FY26 微信直充活动每小时销售对比 (默认数据)',
+                text: 'FY25-FY26 微信直充活动销售对比 (默认数据)',
                 left: 'center',
                 top: mobile ? 20 : 20,
                 textStyle: {
@@ -307,7 +309,7 @@
                 left: mobile ? 80 : 95,
                 y: mobile ? 50 : 45,
                 style: {
-                    text: '（2025-04-29全天销售额为100%）',
+                    text: '（2025-04-29至05-06销售额为100%,AM=00:00-11:59,PM=12:00-23:59）',
                     fill: '#ffffff',
                     fontSize: mobile ? 10 : 14,
                     fontFamily: 'Helvetica'
@@ -419,7 +421,7 @@
             updateChart();
             // 更新标题
             lineChart.setOption({
-                title: { text: 'FY25-FY26 微信直充活动每小时销售对比' }
+                title: { text: 'FY25-FY26 微信直充活动销售对比' }
             });
             line2Chart.setOption({
                 title: { text: 'FY26 June 官微累计增粉数据' }
@@ -434,7 +436,7 @@
             backgroundColor: '#000000'
         });
         const link = document.createElement('a');
-        link.download = 'FY25-FY26 微信直充活动每小时销售对比.png';
+        link.download = 'FY25-FY26 微信直充活动销售对比.png';
         link.href = url;
         link.click();
     }
@@ -445,7 +447,7 @@
             backgroundColor: '#000000'
         });
         const link = document.createElement('a');
-        link.download = 'FY25-FY26 微信直充活动每小时销售对比.svg';
+        link.download = 'FY25-FY26 微信直充活动销售对比.svg';
         link.href = svgUrl;
         link.click();
     }
