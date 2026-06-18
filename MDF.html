@@ -226,12 +226,12 @@
                 const lastIndex = FY26Data.length - 1;
                 const lastValue = FY26Data[lastIndex];
                 const lastTime = times[lastIndex];
+                const mobile = isMobile();
 
                 // 最后一个节点显示在上方，其他显示在右侧
                 const position = lastIndex >= (times.length - 5) ? 'insideBottomLeft' : 'insideBottomRight';
                 const verticalAlign = position === 'insideBottomLeft' ? 'top' : 'top';
                 const align = position === 'insideBottomLeft' ? 'right' : 'left';
-
                 s.markPoint = {
                     symbol: 'circle',
                     symbolSize: 0,
@@ -240,18 +240,18 @@
                         position: position,
                         verticalAlign:verticalAlign,
                         align: align,
-                        formatter: 'Cumulative MDF :￥'+MDFsales,
+                        formatter: 'Cumulative MDF\n￥'+MDFsales,
                         color: '#91cc75',
-                        fontSize: 14,
+                        fontSize: mobile? 12:14,
                         borderColor: '#91cc75',
                         borderWidth: 1,
                         borderRadius: 2,
-                        padding: [3,5],
-                        distance:-5
+                        padding: [2,5],
+                        distance:-5,
+                        lineHeight:mobile? 15:20
                     },
                     data: [
-                        { type: 'max',
-                        }
+                        { type: 'max'}
                     ]
                 };
             }
