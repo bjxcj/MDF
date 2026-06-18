@@ -16,8 +16,8 @@
   },
   "ccTimes":["D1", "D2", "D3", "D4", "D5","D6","D7"],
   "ccData": {
-    "FY25 Labour Day holiday": [1480,3185,939],
-    "FY25 summer holiday": [943,1627,439],
-    "FY26 June": [298,541,634]
+    "FY25 Labour Day holiday": [1480,3185,4124],
+    "FY25 summer holiday": [943,1627,2066],
+    "FY26 June": [298,541,1175]
   }
 }
