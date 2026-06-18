@@ -1,5 +1,6 @@
 {
   "times": ["D1 AM", "D1 PM","D2 AM","D2 PM","D3 AM","D3 PM","D4 AM","D4 PM","D5 AM","D5 PM","D6 AM","D6 PM","D7 AM","D7 PM"],
+  "mdf":"2.52 M",
   "seriesData": {
     "FY25 Labour Day holiday": [7.89,35.71,47.24,60.17,66.26,73.29],
     "FY25 summer holiday": [5.02,16.00,22.10,24.09,26.04,26.72],
@@ -7,5 +8,16 @@
   },
   "followerData": {
     "FY26 June": [3432,15787,18316,20850,28035,46175]
+  },
+  "arpuData": {
+    "FY25 Labour Day holiday (Average)": [529,529,529,529,529,529,529,529,529,529,529,529,529,529,529],
+    "FY25 summer holiday (Average)": [398,398,398,398,398,398,398,398,398,398,398,398,398,398,398],
+    "FY26 June": [783,687,639,572,563,542]
+  },
+  "ccTimes":["D1", "D2", "D3", "D4", "D5","D6","D7"],
+  "ccData": {
+    "FY25 Labour Day holiday": [1480,3185,939],
+    "FY25 summer holiday": [943,1627,439],
+    "FY26 June": [298,541,634]
   }
 }
