@@ -72,144 +72,146 @@
 </head>
 
 <body>
-  <div id="main"></div>
+<div id="main"></div>
 
-  <script>
-    // ==================== 全局配置区域 ====================
+<script>
+  // ==================== 全局配置区域 ====================
 
-    // ---------- 主题配置 ----------
-    // 渠道配色全局映射，同名渠道两侧颜色完全一致
-    const channelColorMap = new Map([
-      ['京东', '#E31D1A'],
-      ['抖音电商', '#37A2DA'],
-      ['微信直充', '#07C160'],
-      ['天猫天机平台', '#B80037'],
-      ['腾瑞明B2B', '#FFDB5C'],
-      ['福禄B2B', '#ff9f7f'],
-      ['天猫', '#fb7293'],
-      ['京东B2B', '#9FE6B8'],
-      ['资和信B2B', '#E690D1'],
-      ['微信', '#e7bcf3'],
-      ['拼多多', '#8378EA'],
-      ['字节宝B2B', '#96BFFF'],
-      ['淘宝', '#5470c6'],
-      ['沐晓B2B', '#91cc75'],
-      ['FY26 1H New', '#32C5E9'],
-      ['流失', '#83787f'],
-      ['其他渠道', '#7f454c']
-    ]);
+  // ---------- 主题配置 ----------
+  // 渠道配色全局映射，同名渠道两侧颜色完全一致
+  const channelColorMap = new Map([
+    ['京东', '#E31D1A'],
+    ['抖音电商', '#37A2DA'],
+    ['微信直充', '#07C160'],
+    ['天猫天机平台', '#B80037'],
+    ['腾瑞明B2B', '#FFDB5C'],
+    ['福禄B2B', '#ff9f7f'],
+    ['天猫', '#fb7293'],
+    ['京东B2B', '#9FE6B8'],
+    ['资和信B2B', '#E690D1'],
+    ['微信', '#e7bcf3'],
+    ['拼多多', '#8378EA'],
+    ['字节宝B2B', '#96BFFF'],
+    ['淘宝', '#5470c6'],
+    ['沐晓B2B', '#91cc75'],
+    ['FY26 1H New', '#32C5E9'],
+    ['流失', '#83787f'],
+    ['其他渠道', '#7f454c']
+  ]);
 
-    // ---------- 节点名称映射 ----------
-    // 内部唯一节点名 → 前端展示名称映射
-    const nodeNameMap = {
-      left_京东: '京东',
-      left_抖音电商: '抖音电商',
-      left_微信直充: '微信直充',
-      left_天猫天机平台: '天猫天机平台',
-      left_腾瑞明B2B: '腾瑞明B2B',
-      left_福禄B2B: '福禄B2B',
-      left_天猫: '天猫',
-      left_京东B2B: '京东B2B',
-      left_资和信B2B: '资和信B2B',
-      left_微信: '微信',
-      left_拼多多: '拼多多',
-      left_字节宝B2B: '字节宝B2B',
-      left_淘宝: '淘宝',
-      left_沐晓B2B: '沐晓B2B',
-      left_FY26_1H_New: 'FY26 1H New',
-      left_其他渠道: '其他渠道',
-      right_京东: '京东',
-      right_抖音电商: '抖音电商',
-      right_微信直充: '微信直充',
-      right_天猫天机平台: '天猫天机平台',
-      right_腾瑞明B2B: '腾瑞明B2B',
-      right_福禄B2B: '福禄B2B',
-      right_天猫: '天猫',
-      right_京东B2B: '京东B2B',
-      right_资和信B2B: '资和信B2B',
-      right_微信: '微信',
-      right_拼多多: '拼多多',
-      right_字节宝B2B: '字节宝B2B',
-      right_淘宝: '淘宝',
-      right_沐晓B2B: '沐晓B2B',
-      right_流失: '流失',
-      right_其他渠道: '其他渠道'
-    };
+  // 节点名称映射（内部唯一节点名 → 原始展示名称，用于tooltip等需要原始名称的地方）
+  const originalNodeNameMap = {
+    left_京东: '京东',
+    left_抖音电商: '抖音电商',
+    left_微信直充: '微信直充',
+    left_天猫天机平台: '天猫天机平台',
+    left_腾瑞明B2B: '腾瑞明B2B',
+    left_福禄B2B: '福禄B2B',
+    left_天猫: '天猫',
+    left_京东B2B: '京东B2B',
+    left_资和信B2B: '资和信B2B',
+    left_微信: '微信',
+    left_拼多多: '拼多多',
+    left_字节宝B2B: '字节宝B2B',
+    left_淘宝: '淘宝',
+    left_沐晓B2B: '沐晓B2B',
+    left_FY26_1H_New: 'FY26 1H New',
+    left_其他渠道: '其他渠道',
+    right_京东: '京东',
+    right_抖音电商: '抖音电商',
+    right_微信直充: '微信直充',
+    right_天猫天机平台: '天猫天机平台',
+    right_腾瑞明B2B: '腾瑞明B2B',
+    right_福禄B2B: '福禄B2B',
+    right_天猫: '天猫',
+    right_京东B2B: '京东B2B',
+    right_资和信B2B: '资和信B2B',
+    right_微信: '微信',
+    right_拼多多: '拼多多',
+    right_字节宝B2B: '字节宝B2B',
+    right_淘宝: '淘宝',
+    right_沐晓B2B: '沐晓B2B',
+    right_流失: '流失',
+    right_其他渠道: '其他渠道'
+  };
 
-    // ---------- 文字配置 ----------
-    const CONFIG_TITLE = 'FY25 2H to FY26 1H 用户流向（其他渠道：天猫官旗、微信官微、淘宝直充等）';
-    const CONFIG_LEFT_SUBTITLE = 'FY25 2H 渠道用户数\n用户流失率升序';
-    const CONFIG_RIGHT_SUBTITLE = 'FY26 1H 渠道用户数(本渠道+其他渠道转移)\n用户增长率降序';
-    const CONFIG_FONT_COLOR = '#FFFFFF';
-    const CONFIG_FONT_FAMILY = 'Helvetica, Arial, sans-serif';
+  // 节点名称映射（内部唯一节点名 → 当前展示名称，左侧包含流失率）
+  const nodeNameMap = {};  // 将在buildLeftNodes和buildRightNodes后动态填充
 
-    // ---------- 透明度配置 ----------
-    const opacityConfig = {
-      normal: 0.4,         // 正常状态线条透明度
-      nodeNormal: 0.9,     // 正常状态节点透明度
-      highlight: 1.0,      // 高亮状态透明度
-      blur: 0.5,           // 淡化状态透明度
-      highlightLine: 0.7,  // 高亮线条透明度
-      blurLine: 0.05       // 淡化线条透明度
-    };
+  // ---------- 文字配置 ----------
+  const CONFIG_TITLE = 'FY25 2H to FY26 1H 用户流向（其他渠道：天猫官旗、官微、淘宝直充等）';
+  const CONFIG_LEFT_SUBTITLE = 'FY25 2H 渠道用户数\n用户流失率升序';
+  const CONFIG_RIGHT_SUBTITLE = 'FY26 1H 渠道用户数(本渠道+其他渠道转移)\n用户增长率降序';
+  const CONFIG_FONT_COLOR = '#FFFFFF';
+  const CONFIG_FONT_FAMILY = 'Helvetica, Arial, sans-serif';
 
-    // ---------- 桑基图布局配置 ----------
-    const layoutConfig = {
-      nodeWidth: 20,           // 节点宽度
-      nodeAlign: 'justify',    // 节点对齐方式
-      layoutIterations: 0,     // 布局迭代次数
-      curveness: 0.5,          // 线条弯曲度
-      leftPadding: 100,        // 左侧内边距
-      rightPadding: 100,       // 右侧内边距
-      topPadding: 80,          // 顶部内边距
-      bottomPadding: 0,        // 底部内边距
-      labelWidth: 200,         // 标签宽度（增加以容纳长名称）
-      line_color:'gradient'  // 线条颜色
-    };
+  // ---------- 透明度配置 ----------
+  const opacityConfig = {
+    normal: 0.4,         // 正常状态线条透明度
+    nodeNormal: 0.9,     // 正常状态节点透明度
+    highlight: 1.0,      // 高亮状态透明度
+    blur: 0.5,           // 淡化状态透明度
+    highlightLine: 0.7,  // 高亮线条透明度
+    blurLine: 0.05       // 淡化线条透明度
+  };
 
-    // ---------- 移动端布局配置 ----------
-    const mobileConfig = {
-      titleFontSize: 16,
-      subtitleFontSize: 10,
-      subtitleLineHeight: 16,
-      padding: 60,
-      graphic_padding:20,
-      nodeWidth: 10,
-      curveness: 0.3,
-      labelFontSize: 10,
-      labelWidth: 50
-    };
+  // ---------- 桑基图布局配置 ----------
+  const layoutConfig = {
+    nodeWidth: 20,           // 节点宽度
+    nodeAlign: 'justify',    // 节点对齐方式
+    layoutIterations: 0,     // 布局迭代次数
+    curveness: 0.5,          // 线条弯曲度
+    leftPadding: 150,        // 左侧内边距
+    rightPadding: 150,       // 右侧内边距
+    topPadding: 80,          // 顶部内边距
+    bottomPadding: 0,        // 底部内边距
+    labelWidth: 200,         // 标签宽度（增加以容纳长名称）
+    line_color:'gradient'  // 线条颜色
+  };
 
-    // ---------- 高亮效果配置 ----------
-    const highlightConfig = {
-      lineWidth: 3,           // 高亮线条宽度
-      normalLineWidth: 1,     // 普通线条宽度
-      nodeOpacity: 1.0,       // 高亮节点透明度
-      labelOpacity: 1.0,      // 高亮标签透明度
-      blurNodeOpacity: 0.1,   // 淡化节点透明度
-      blurLabelOpacity: 0.2,  // 淡化标签透明度
-      autoInterval: 1500,     // 自动轮播间隔(ms)
-      lastShowDelay: 1500     // 最后一个渠道显示时长(ms)
-    };
+  // ---------- 移动端布局配置 ----------
+  const mobileConfig = {
+    titleFontSize: 16,
+    subtitleFontSize: 10,
+    subtitleLineHeight: 16,
+    padding: 60,
+    graphic_padding:20,
+    nodeWidth: 10,
+    curveness: 0.3,
+    labelFontSize: 10,
+    labelWidth: 50
+  };
 
-    // ---------- 样式配置 ----------
-    const styleConfig = {
-      backgroundColor: '#000000',
-      tooltipTrigger: 'item',
-      tooltipConfine: true,
-      draggable: false
-    };
+  // ---------- 高亮效果配置 ----------
+  const highlightConfig = {
+    lineWidth: 3,           // 高亮线条宽度
+    normalLineWidth: 1,     // 普通线条宽度
+    nodeOpacity: 1.0,       // 高亮节点透明度
+    labelOpacity: 1.0,      // 高亮标签透明度
+    blurNodeOpacity: 0.1,   // 淡化节点透明度
+    blurLabelOpacity: 0.2,  // 淡化标签透明度
+    autoInterval: 1500,     // 自动轮播间隔(ms)
+    lastShowDelay: 1500     // 最后一个渠道显示时长(ms)
+  };
 
-    // ==================== 内部变量 ====================
+  // ---------- 样式配置 ----------
+  const styleConfig = {
+    backgroundColor: '#000000',
+    tooltipTrigger: 'item',
+    tooltipConfine: true,
+    draggable: false
+  };
 
-    // 移动端检测
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+  // ==================== 内部变量 ====================
 
-    
+  // 移动端检测
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
 
-    // 流向数据（静态）
-    const links = [
-      { source: 'left_京东', target: 'right_京东', value:87833},
+
+
+  // 流向数据（静态）
+  const links = [
+    { source: 'left_京东', target: 'right_京东', value:87833},
 { source: 'left_京东', target: 'right_抖音电商', value:7138},
 { source: 'left_京东', target: 'right_天猫天机平台', value:4593},
 { source: 'left_京东', target: 'right_微信直充', value:1603},
@@ -266,572 +268,434 @@
 { source: 'left_其他渠道', target: 'right_腾瑞明B2B', value:1457},
 { source: 'left_其他渠道', target: 'right_流失', value:114465},
 
-    ];
+  ];
 
-    // 从 links 动态提取左侧和右侧渠道列表
-    const leftChannels = [...new Set(links.map(l => l.source.replace('left_', '')))];
-    const rightChannels = [...new Set(links.map(l => l.target.replace('right_', '')))];
+  // 从 links 动态提取左侧和右侧渠道列表
+  const leftChannels = [...new Set(links.map(l => l.source.replace('left_', '')))];
+  const rightChannels = [...new Set(links.map(l => l.target.replace('right_', '')))];
 
-    // 计算渠道流失率
-    function getLossRate(channel) {
-      const sourceLinks = links.filter(l => l.source === `left_${channel}` && l.target === 'right_流失');
-      const lossVal = sourceLinks.length > 0 ? sourceLinks[0].value : 0;
-      const totalLinks = links.filter(l => l.source === `left_${channel}`);
+  // 计算渠道流失率
+  function getLossRate(channel) {
+    const sourceLinks = links.filter(l => l.source === `left_${channel}` && l.target === 'right_流失');
+    const lossVal = sourceLinks.length > 0 ? sourceLinks[0].value : 0;
+    const totalLinks = links.filter(l => l.source === `left_${channel}`);
+    const totalVal = totalLinks.reduce((sum, l) => sum + l.value, 0);
+    return totalVal > 0 ? lossVal / totalVal : 0;
+  }
+
+  // 获取渠道总用户数（流出量）
+  function getTotalOutflow(channel) {
+    const sourceLinks = links.filter(l => l.source === `left_${channel}`);
+    return sourceLinks.reduce((sum, l) => sum + l.value, 0);
+  }
+
+  // 获取排序后的左侧渠道：按流失率升序，流失率相同时按用户数降序
+  function getSortedLeftChannels() {
+    const channelStats = [];
+    leftChannels.forEach(ch => {
+      const lossLinks = links.filter(l => l.source === `left_${ch}` && l.target === 'right_流失');
+      const lossVal = lossLinks.length > 0 ? lossLinks[0].value : 0;
+      const totalLinks = links.filter(l => l.source === `left_${ch}`);
       const totalVal = totalLinks.reduce((sum, l) => sum + l.value, 0);
-      return totalVal > 0 ? lossVal / totalVal : 0;
-    }
+      channelStats.push({
+        name: ch,
+        lossVal: lossVal,
+        totalVal: totalVal
+      });
+    });
+    channelStats.sort((a, b) => {
+      const rateA = a.lossVal * b.totalVal;
+      const rateB = b.lossVal * a.totalVal;
+      if (rateA !== rateB) {
+        return rateA - rateB;
+      }
+      return b.totalVal - a.totalVal;
+    });
+    return channelStats.map(c => c.name);
+  }
 
-    // 获取渠道总用户数（流出量）
-    function getTotalOutflow(channel) {
-      const sourceLinks = links.filter(l => l.source === `left_${channel}`);
-      return sourceLinks.reduce((sum, l) => sum + l.value, 0);
-    }
-
-    // 获取排序后的左侧渠道：按流失率升序，流失率相同时按用户数降序
-    function getSortedLeftChannels() {
-      const channelStats = [];
-      leftChannels.forEach(ch => {
-        const lossLinks = links.filter(l => l.source === `left_${ch}` && l.target === 'right_流失');
-        const lossVal = lossLinks.length > 0 ? lossLinks[0].value : 0;
-        const totalLinks = links.filter(l => l.source === `left_${ch}`);
-        const totalVal = totalLinks.reduce((sum, l) => sum + l.value, 0);
+  // 获取排序后的右侧渠道：按用户增长率降序，流失在最下方
+  function getSortedRightChannels() {
+    const channelStats = [];
+    rightChannels.forEach(ch => {
+      if (ch !== '流失') {
+        // 计算流入量（右侧该渠道的总用户数）
+        const targetLinks = links.filter(l => l.target === `right_${ch}`);
+        const inflowVal = targetLinks.reduce((sum, l) => sum + l.value, 0);
+        // 计算流出量（左侧该渠道的原用户数）
+        const sourceLinks = links.filter(l => l.source === `left_${ch}`);
+        const outflowVal = sourceLinks.reduce((sum, l) => sum + l.value, 0);
+        // 计算增长率 = (流入 - 流出) / 流出，左侧没有则为 Infinity
+        const growthRate = outflowVal > 0 ? (inflowVal - outflowVal) / outflowVal : Infinity;
         channelStats.push({
           name: ch,
-          lossVal: lossVal,
-          totalVal: totalVal
+          inflowVal: inflowVal,
+          outflowVal: outflowVal,
+          growthRate: growthRate
         });
-      });
-      channelStats.sort((a, b) => {
-        const rateA = a.lossVal * b.totalVal;
-        const rateB = b.lossVal * a.totalVal;
-        if (rateA !== rateB) {
-          return rateA - rateB;
-        }
-        return b.totalVal - a.totalVal;
-      });
-      return channelStats.map(c => c.name);
-    }
+      }
+    });
+    // 按增长率降序排列，增长率相同（如都是Infinity）则按流入量降序
+    channelStats.sort((a, b) => {
+      if (b.growthRate !== a.growthRate) {
+        return b.growthRate - a.growthRate;
+      }
+      return b.inflowVal - a.inflowVal;
+    });
+    return [...channelStats.map(c => c.name), '流失'];
+  }
 
-    // 获取排序后的右侧渠道：按用户增长率降序，流失在最下方
-    function getSortedRightChannels() {
-      const channelStats = [];
-      rightChannels.forEach(ch => {
-        if (ch !== '流失') {
-          // 计算流入量（右侧该渠道的总用户数）
-          const targetLinks = links.filter(l => l.target === `right_${ch}`);
+  // 构建左侧节点数据（已排序）
+  function buildLeftNodes() {
+    const leftNodes = getSortedLeftChannels().map(ch => {
+      const channelId = `left_${ch}`;
+      const showName = ch === 'FY26_1H_New' ? 'FY26 1H New' : ch;
+
+      // 计算流失率
+      const lossRate = getLossRate(ch);
+      const lossRatePercent = (lossRate * 100).toFixed(2);
+
+      // 在渠道名称后添加流失率
+      const displayName = `${showName} (${lossRatePercent}%)`;
+
+      // 更新nodeNameMap
+      nodeNameMap[channelId] = displayName;
+
+      return {
+        id: channelId,      // 唯一标识符
+        name: displayName,   // 显示名称（包含流失率）
+        label: {
+          formatter: displayName,
+          position: 'left',
+          color: CONFIG_FONT_COLOR
+        },
+        depth: 0,
+        itemStyle: { color: channelColorMap.get(ch) }
+      };
+    });
+
+    return leftNodes;
+  }
+
+  // 构建右侧节点数据（已排序）
+  function buildRightNodes() {
+    const rightNodes = getSortedRightChannels().map(ch => {
+      const channelId = `right_${ch}`;
+
+      // 更新nodeNameMap
+      nodeNameMap[channelId] = ch;
+
+      return {
+        id: channelId,      // 唯一标识符
+        name: ch,            // 显示名称
+        label: {
+          formatter: ch,
+          position: 'right',
+          color: CONFIG_FONT_COLOR
+        },
+        depth: 1,
+        itemStyle: { color: channelColorMap.get(ch) }
+      };
+    });
+
+    return rightNodes;
+  }
+
+  // 合并左右两侧节点
+  const nodes = [...buildLeftNodes(), ...buildRightNodes()];
+
+  const option = {
+    title: {
+      text: CONFIG_TITLE,
+      left: 'center',
+      textStyle: {
+        color: CONFIG_FONT_COLOR,
+        fontSize: isMobile ? mobileConfig.titleFontSize : 24,
+        fontFamily: CONFIG_FONT_FAMILY,
+        width: isMobile ? window.innerWidth-20 : null,
+        overflow: 'truncate',
+        ellipsis: '..'
+      }
+    },
+    graphic: [
+      {
+        type: 'text',
+        left: isMobile ? mobileConfig.graphic_padding : layoutConfig.leftPadding - 40,
+        top: 30,
+        style: {
+          text: CONFIG_LEFT_SUBTITLE,
+          fontSize: isMobile ? mobileConfig.subtitleFontSize : 14,
+          lineHeight: isMobile ? mobileConfig.subtitleLineHeight : 20,
+          fill: CONFIG_FONT_COLOR,
+          fontFamily: CONFIG_FONT_FAMILY
+        }
+      },
+      {
+        type: 'text',
+        right: isMobile ? mobileConfig.graphic_padding : layoutConfig.rightPadding - 40,
+        top: 30,
+        style: {
+          text: CONFIG_RIGHT_SUBTITLE,
+          textAlign: 'right',
+          fontSize: isMobile ? mobileConfig.subtitleFontSize : 14,
+          lineHeight: isMobile ? mobileConfig.subtitleLineHeight : 20,
+          fill: CONFIG_FONT_COLOR,
+          fontFamily: CONFIG_FONT_FAMILY
+        }
+      }
+    ],
+    tooltip: {
+      trigger: styleConfig.tooltipTrigger,
+      confine: styleConfig.tooltipConfine,
+      position: function(point, params, dom, rect, size) {
+        const x = point[0];
+        const y = point[1];
+        const viewWidth = size.viewSize[0];
+        const viewHeight = size.viewSize[1];
+        const tooltipWidth = size.contentSize[0];
+        const tooltipHeight = size.contentSize[1];
+
+        let newX = x + 15;
+        let newY = y;
+
+        // 如果右侧超出，显示在左侧
+        if (newX + tooltipWidth > viewWidth) {
+          newX = x - tooltipWidth - 10;
+        }
+
+        // 如果底部超出，向上移动
+        if (newY + tooltipHeight > viewHeight) {
+          newY = viewHeight - tooltipHeight - 10;
+        }
+
+        // 如果顶部超出，显示在下方
+        if (newY < 0) {
+          newY = y + 10;
+        }
+
+        return [newX, newY];
+      },
+      formatter: function (params) {
+        // 数字千位分隔格式化函数
+        const fmt = (n) => n.toLocaleString('zh-CN');
+
+        // 悬浮在线条：保持原有格式
+        if (params.data.source && params.data.target) {
+          const s = originalNodeNameMap[params.data.source];
+          const t = originalNodeNameMap[params.data.target];
+          return `${s} to ${t} ：${fmt(params.data.value)}人`;
+        }
+
+        // 悬浮在节点：渠道名称：总用户数 + 该节点所有上下游流向明细（表格对齐）
+        // 优先使用 id 获取内部唯一标识符
+        let nodeKey = params.data && params.data.id ? params.data.id : params.name;
+        const nodeShowName = originalNodeNameMap[nodeKey] || nodeKey;
+        let tip = `<strong>${nodeShowName}：${fmt(params.value)}人</strong><br/>`;
+        tip += '<table style="border-collapse:collapse; margin-top:5px;">';
+
+        // 遍历所有连线，找出当前节点所有流入、流出数据
+        const relatedLinks = [];
+        let lossCount = 0;
+        links.forEach(link => {
+          const sourceName = originalNodeNameMap[link.source];
+          const targetName = originalNodeNameMap[link.target];
+          if (link.source === nodeKey || link.target === nodeKey) {
+            relatedLinks.push({
+              sourceName,
+              targetName,
+              value: link.value,
+              isLoss: targetName === '流失',
+              isFY26New: sourceName === 'FY26 1H New'
+            });
+            if (targetName === '流失') {
+              lossCount += link.value;
+            }
+          }
+        });
+
+        // 排序：非FY26 1H New按数值降序，FY26 1H New放在最后（流失在FY26 1H New之前）
+        relatedLinks.sort((a, b) => {
+          // FY26 1H New 排在最后
+          if (a.isFY26New && !b.isFY26New) return 1;
+          if (!a.isFY26New && b.isFY26New) return -1;
+          // 流失排在最后（在 FY26 1H New 之前）
+          if (a.isLoss && !b.isLoss) return 1;
+          if (!a.isLoss && b.isLoss) return -1;
+          return b.value - a.value;
+        });
+
+        // 输出排序后的连线数据（表格形式）
+        relatedLinks.forEach(link => {
+          // 左侧渠道只显示 "to 右侧渠道名称"，右侧渠道显示完整格式
+          if (nodeKey.startsWith('left_')) {
+            tip += `<tr><td style="padding:2px 10px 2px 0;">to ${link.targetName}</td><td style="text-align:right; padding:2px 0;">${fmt(link.value)}人</td></tr>`;
+          } else {
+            tip += `<tr><td style="padding:2px 10px 2px 0;">${link.sourceName} to</td><td style="text-align:right; padding:2px 0;">${fmt(link.value)}人</td></tr>`;
+          }
+        });
+
+        tip += '</table>';
+
+        // 添加流失率（仅左侧渠道显示）
+        if (lossCount > 0 && params.value > 0 && nodeKey.startsWith('left_')) {
+          tip += `\n流失率：${((lossCount / params.value) * 100).toFixed(2)}%`;
+        }
+
+        // 添加增长率（仅右侧渠道显示）
+        if (nodeKey.startsWith('right_') && nodeShowName !== '流失') {
+          const targetLinks = links.filter(l => l.target === nodeKey);
           const inflowVal = targetLinks.reduce((sum, l) => sum + l.value, 0);
-          // 计算流出量（左侧该渠道的原用户数）
-          const sourceLinks = links.filter(l => l.source === `left_${ch}`);
+          // 查找对应的左侧渠道
+          const leftNodeKey = nodeKey.replace('right_', 'left_');
+          const sourceLinks = links.filter(l => l.source === leftNodeKey);
           const outflowVal = sourceLinks.reduce((sum, l) => sum + l.value, 0);
-          // 计算增长率 = (流入 - 流出) / 流出，左侧没有则为 Infinity
-          const growthRate = outflowVal > 0 ? (inflowVal - outflowVal) / outflowVal : Infinity;
-          channelStats.push({
-            name: ch,
-            inflowVal: inflowVal,
-            outflowVal: outflowVal,
-            growthRate: growthRate
-          });
+          if (outflowVal > 0) {
+            const growthRate = ((inflowVal - outflowVal) / outflowVal) * 100;
+            const sign = growthRate >= 0 ? '+' : '';
+            tip += `\n增长率：${sign}${growthRate.toFixed(2)}%`;
+          } else {
+            // 左侧没有该渠道（纯新增渠道），增长率为无穷大
+            tip += `\n增长率：∞（新增）`;
+          }
         }
-      });
-      // 按增长率降序排列，增长率相同（如都是Infinity）则按流入量降序
-      channelStats.sort((a, b) => {
-        if (b.growthRate !== a.growthRate) {
-          return b.growthRate - a.growthRate;
-        }
-        return b.inflowVal - a.inflowVal;
-      });
-      return [...channelStats.map(c => c.name), '流失'];
-    }
 
-    // 构建左侧节点数据（已排序）
-    function buildLeftNodes() {
-      return getSortedLeftChannels().map(ch => {
-        const channelId = `left_${ch}`;
-        const showName = ch === 'FY26_1H_New' ? 'FY26 1H New' : ch;
-        return {
-          id: channelId,      // 唯一标识符
-          name: showName,      // 显示名称
-          label: {
-            formatter: showName,
-            position: 'left',
-            color: CONFIG_FONT_COLOR
-          },
-          depth: 0,
-          itemStyle: { color: channelColorMap.get(ch) }
-        };
-      });
-    }
-
-    // 构建右侧节点数据（已排序）
-    function buildRightNodes() {
-      return getSortedRightChannels().map(ch => {
-        const channelId = `right_${ch}`;
-        return {
-          id: channelId,      // 唯一标识符
-          name: ch,            // 显示名称
-          label: {
-            formatter: ch,
-            position: 'right',
-            color: CONFIG_FONT_COLOR
-          },
-          depth: 1,
-          itemStyle: { color: channelColorMap.get(ch) }
-        };
-      });
-    }
-
-    // 合并左右两侧节点
-    const nodes = [...buildLeftNodes(), ...buildRightNodes()];
-
-    const option = {
-      title: {
-        text: CONFIG_TITLE,
-        left: 'center',
-        textStyle: {
-          color: CONFIG_FONT_COLOR,
-          fontSize: isMobile ? mobileConfig.titleFontSize : 24,
-          fontFamily: CONFIG_FONT_FAMILY,
-          width: isMobile ? window.innerWidth-20 : null,
-          overflow: 'truncate',
-          ellipsis: '..'
-        }
+        return tip;
+      }
+    },
+    series: [{
+      type: 'sankey',
+      left: isMobile ? mobileConfig.padding : layoutConfig.leftPadding,
+      top: isMobile ? mobileConfig.padding + 10 : layoutConfig.topPadding,
+      right: isMobile ? mobileConfig.padding : layoutConfig.rightPadding,
+      bottom: layoutConfig.bottomPadding,
+      data: nodes,
+      links: links,
+      layoutIterations: layoutConfig.layoutIterations,
+      nodeAlign: layoutConfig.nodeAlign,
+      nodeWidth: isMobile ? mobileConfig.nodeWidth : layoutConfig.nodeWidth,
+      lineStyle: {
+        color: layoutConfig.line_color,
+        curveness: isMobile ? mobileConfig.curveness : layoutConfig.curveness,
+        opacity: opacityConfig.normal
       },
-      graphic: [
-        {
-          type: 'text',
-          left: isMobile ? mobileConfig.graphic_padding : layoutConfig.leftPadding - 40,
-          top: 30,
-          style: {
-            text: CONFIG_LEFT_SUBTITLE,
-            fontSize: isMobile ? mobileConfig.subtitleFontSize : 14,
-            lineHeight: isMobile ? mobileConfig.subtitleLineHeight : 20,
-            fill: CONFIG_FONT_COLOR,
-            fontFamily: CONFIG_FONT_FAMILY
-          }
-        },
-        {
-          type: 'text',
-          right: isMobile ? mobileConfig.graphic_padding : layoutConfig.rightPadding - 40,
-          top: 30,
-          style: {
-            text: CONFIG_RIGHT_SUBTITLE,
-            textAlign: 'right',
-            fontSize: isMobile ? mobileConfig.subtitleFontSize : 14,
-            lineHeight: isMobile ? mobileConfig.subtitleLineHeight : 20,
-            fill: CONFIG_FONT_COLOR,
-            fontFamily: CONFIG_FONT_FAMILY
-          }
-        }
-      ],
-      tooltip: {
-        trigger: styleConfig.tooltipTrigger,
-        confine: styleConfig.tooltipConfine,
-        position: function(point, params, dom, rect, size) {
-          const x = point[0];
-          const y = point[1];
-          const viewWidth = size.viewSize[0];
-          const viewHeight = size.viewSize[1];
-          const tooltipWidth = size.contentSize[0];
-          const tooltipHeight = size.contentSize[1];
-          
-          let newX = x + 15;
-          let newY = y;
-          
-          // 如果右侧超出，显示在左侧
-          if (newX + tooltipWidth > viewWidth) {
-            newX = x - tooltipWidth - 10;
-          }
-          
-          // 如果底部超出，向上移动
-          if (newY + tooltipHeight > viewHeight) {
-            newY = viewHeight - tooltipHeight - 10;
-          }
-          
-          // 如果顶部超出，显示在下方
-          if (newY < 0) {
-            newY = y + 10;
-          }
-          
-          return [newX, newY];
-        },
-        formatter: function (params) {
-          // 数字千位分隔格式化函数
-          const fmt = (n) => n.toLocaleString('zh-CN');
-
-          // 悬浮在线条：保持原有格式
-          if (params.data.source && params.data.target) {
-            const s = nodeNameMap[params.data.source];
-            const t = nodeNameMap[params.data.target];
-            return `${s} to ${t} ：${fmt(params.data.value)}人`;
-          }
-
-          // 悬浮在节点：渠道名称：总用户数 + 该节点所有上下游流向明细（表格对齐）
-          // 优先使用 id 获取内部唯一标识符
-          let nodeKey = params.data && params.data.id ? params.data.id : params.name;
-          const nodeShowName = nodeNameMap[nodeKey] || nodeKey;
-          let tip = `<strong>${nodeShowName}：${fmt(params.value)}人</strong><br/>`;
-          tip += '<table style="border-collapse:collapse; margin-top:5px;">';
-
-          // 遍历所有连线，找出当前节点所有流入、流出数据
-          const relatedLinks = [];
-          let lossCount = 0;
-          links.forEach(link => {
-            const sourceName = nodeNameMap[link.source];
-            const targetName = nodeNameMap[link.target];
-            if (link.source === nodeKey || link.target === nodeKey) {
-              relatedLinks.push({ 
-                sourceName, 
-                targetName, 
-                value: link.value, 
-                isLoss: targetName === '流失',
-                isFY26New: sourceName === 'FY26 1H New'
-              });
-              if (targetName === '流失') {
-                lossCount += link.value;
-              }
-            }
-          });
-
-          // 排序：非FY26 1H New按数值降序，FY26 1H New放在最后（流失在FY26 1H New之前）
-          relatedLinks.sort((a, b) => {
-            // FY26 1H New 排在最后
-            if (a.isFY26New && !b.isFY26New) return 1;
-            if (!a.isFY26New && b.isFY26New) return -1;
-            // 流失排在最后（在 FY26 1H New 之前）
-            if (a.isLoss && !b.isLoss) return 1;
-            if (!a.isLoss && b.isLoss) return -1;
-            return b.value - a.value;
-          });
-
-          // 输出排序后的连线数据（表格形式）
-          relatedLinks.forEach(link => {
-            // 左侧渠道只显示 "to 右侧渠道名称"，右侧渠道显示完整格式
-            if (nodeKey.startsWith('left_')) {
-              tip += `<tr><td style="padding:2px 10px 2px 0;">to ${link.targetName}</td><td style="text-align:right; padding:2px 0;">${fmt(link.value)}人</td></tr>`;
-            } else {
-              tip += `<tr><td style="padding:2px 10px 2px 0;">${link.sourceName} to</td><td style="text-align:right; padding:2px 0;">${fmt(link.value)}人</td></tr>`;
-            }
-          });
-
-          tip += '</table>';
-
-          // 添加流失率（仅左侧渠道显示）
-          if (lossCount > 0 && params.value > 0 && nodeKey.startsWith('left_')) {
-            tip += `\n流失率：${((lossCount / params.value) * 100).toFixed(2)}%`;
-          }
-
-          // 添加增长率（仅右侧渠道显示）
-          if (nodeKey.startsWith('right_') && nodeShowName !== '流失') {
-            const targetLinks = links.filter(l => l.target === nodeKey);
-            const inflowVal = targetLinks.reduce((sum, l) => sum + l.value, 0);
-            // 查找对应的左侧渠道
-            const leftNodeKey = nodeKey.replace('right_', 'left_');
-            const sourceLinks = links.filter(l => l.source === leftNodeKey);
-            const outflowVal = sourceLinks.reduce((sum, l) => sum + l.value, 0);
-            if (outflowVal > 0) {
-              const growthRate = ((inflowVal - outflowVal) / outflowVal) * 100;
-              const sign = growthRate >= 0 ? '+' : '';
-              tip += `\n增长率：${sign}${growthRate.toFixed(2)}%`;
-            } else {
-              // 左侧没有该渠道（纯新增渠道），增长率为无穷大
-              tip += `\n增长率：∞（新增）`;
-            }
-          }
-
-          return tip;
-        }
+      label: {
+        show: true,
+        fontSize: isMobile ? mobileConfig.labelFontSize : 14,
+        fontFamily: CONFIG_FONT_FAMILY,
+        width: isMobile ? mobileConfig.labelWidth : layoutConfig.labelWidth,
+        overflow: isMobile ? 'truncate' : null,
+        textOverflow: isMobile ? 'ellipsis' : null
       },
-      series: [{
-        type: 'sankey',
-        left: isMobile ? mobileConfig.padding : layoutConfig.leftPadding,
-        top: isMobile ? mobileConfig.padding + 10 : layoutConfig.topPadding,
-        right: isMobile ? mobileConfig.padding : layoutConfig.rightPadding,
-        bottom: layoutConfig.bottomPadding,
-        data: nodes,
-        links: links,
-        layoutIterations: layoutConfig.layoutIterations,
-        nodeAlign: layoutConfig.nodeAlign,
-        nodeWidth: isMobile ? mobileConfig.nodeWidth : layoutConfig.nodeWidth,
+      emphasis: {
+        focus: 'none',
         lineStyle: {
-          color: layoutConfig.line_color,
-          curveness: isMobile ? mobileConfig.curveness : layoutConfig.curveness,
-          opacity: opacityConfig.normal
+          opacity: opacityConfig.highlight,
+          width: highlightConfig.lineWidth
+        },
+        itemStyle: {
+          opacity: opacityConfig.highlight
         },
         label: {
           show: true,
-          fontSize: isMobile ? mobileConfig.labelFontSize : 14,
-          fontFamily: CONFIG_FONT_FAMILY,
-          width: isMobile ? mobileConfig.labelWidth : layoutConfig.labelWidth,
-          overflow: isMobile ? 'truncate' : null,
-          textOverflow: isMobile ? 'ellipsis' : null
-        },
-        emphasis: {
-          focus: 'none',
-          lineStyle: {
-            opacity: opacityConfig.highlight,
-            width: highlightConfig.lineWidth
-          },
-          itemStyle: {
-            opacity: opacityConfig.highlight
-          },
-          label: {
-            show: true,
-            fontWeight: 'bold'
-          }
-        },
-        draggable: styleConfig.draggable
-      }]
-    };
-
-    const chart = echarts.init(document.getElementById('main'));
-    chart.setOption(option);
-    window.addEventListener('resize', () => chart.resize());
-
-    // 自定义高亮逻辑（支持节点、标签、线条悬停）
-    function handleHighlight(params) {
-      // 调试日志 - 可以在浏览器控制台查看
-      console.log('hover params:', params.name, params.data);
-
-      if (params.componentType !== 'series' || params.seriesType !== 'sankey' || isAutoHighlighting) {
-        return;
-      }
-
-      // 尝试获取节点名称
-      let nodeName = null;
-      let edgeSource = null;
-      let edgeTarget = null;
-
-      // 首先检查是否是线条（通过 data.source !== undefined 判断，优先于其他检测）
-      if (params.data && params.data.source !== undefined && params.data.target !== undefined) {
-        edgeSource = params.data.source;
-        edgeTarget = params.data.target;
-        // 线条悬停时，使用 target 作为主要节点
-        nodeName = edgeTarget;
-      } else {
-        // 尝试从多个位置获取节点 id 或 name
-        // params.data 存在且有 id
-        if (params.data && (params.data.id || params.data.name)) {
-          nodeName = params.data.id || params.data.name;
+          fontWeight: 'bold'
         }
-        // params.name 存在
-        else if (params.name) {
-          nodeName = params.name;
-        }
-      }
+      },
+      draggable: styleConfig.draggable
+    }]
+  };
 
-      if (!nodeName) return;
+  const chart = echarts.init(document.getElementById('main'));
+  chart.setOption(option);
+  window.addEventListener('resize', () => chart.resize());
 
-      // 如果 nodeName 是显示名称（如"京东"），查找对应的内部名称
-      // 优先根据前缀匹配：左侧标签匹配 left_xxx，右侧标签匹配 right_xxx
-      if (!nodeNameMap[nodeName]) {
-        let leftMatch = null;
-        let rightMatch = null;
-        // 反向查找：显示名称 -> 内部名称
-        for (const [key, value] of Object.entries(nodeNameMap)) {
-          if (value === nodeName) {
-            if (key.startsWith('left_')) {
-              leftMatch = key;
-              break; // 优先匹配左侧，找到即停止
-            } else if (key.startsWith('right_')) {
-              rightMatch = key;
-            }
-          }
-        }
-        // 如果找到左侧匹配用左侧，否则用右侧匹配
-        nodeName = leftMatch || rightMatch;
-      }
+  // 自定义高亮逻辑（支持节点、标签、线条悬停）
+  function handleHighlight(params) {
+    // 调试日志 - 可以在浏览器控制台查看
+    console.log('hover params:', params.name, params.data);
 
-      // 再次检查是否存在
-      if (!nodeName || !nodeNameMap[nodeName]) return;
-
-      const channelName = nodeNameMap[nodeName];
-
-      // 找到所有需要高亮的节点和链接
-      const highlightNodes = new Set();
-      const highlightLinks = new Set();
-
-      // 高亮当前节点
-      highlightNodes.add(nodeName);
-
-      // 如果是线条悬停，直接高亮该线条
-      if (edgeSource && edgeTarget) {
-        links.forEach((link, index) => {
-          if (link.source === edgeSource && link.target === edgeTarget) {
-            highlightLinks.add(index);
-            highlightNodes.add(edgeSource);
-            highlightNodes.add(edgeTarget);
-          }
-        });
-      } else {
-        // 节点悬停逻辑：找到同名渠道（跨左右两侧）
-        const sameNameNodes = nodes.filter(n => nodeNameMap[n.id] === channelName);
-        sameNameNodes.forEach(n => highlightNodes.add(n.id));
-
-        // 找到所有与当前节点相关的链接
-        links.forEach((link, index) => {
-          if (link.source === nodeName || link.target === nodeName) {
-            highlightLinks.add(index);
-            highlightNodes.add(link.source);
-            highlightNodes.add(link.target);
-
-            // 对于右侧节点，高亮其下游节点
-            if (link.source === nodeName) {
-              const findDownstream = (target) => {
-                links.forEach((l, i) => {
-                  if (l.source === target) {
-                    highlightLinks.add(i);
-                    highlightNodes.add(l.source);
-                    highlightNodes.add(l.target);
-                    findDownstream(l.target);
-                  }
-                });
-              };
-              findDownstream(link.target);
-            }
-
-            // 对于左侧节点，高亮其上游节点
-            if (link.target === nodeName) {
-              const findUpstream = (source) => {
-                links.forEach((l, i) => {
-                  if (l.target === source) {
-                    highlightLinks.add(i);
-                    highlightNodes.add(l.source);
-                    highlightNodes.add(l.target);
-                    findUpstream(l.source);
-                  }
-                });
-              };
-              findUpstream(link.source);
-            }
-          }
-        });
-      }
-
-      // 构建新的 series 数据，设置透明度
-      const newNodes = nodes.map(n => ({
-        ...n,
-        itemStyle: {
-          ...n.itemStyle,
-          opacity: highlightNodes.has(n.id) ? highlightConfig.nodeOpacity : highlightConfig.blurNodeOpacity
-        },
-        label: {
-          ...n.label,
-          opacity: highlightNodes.has(n.id) ? highlightConfig.labelOpacity : highlightConfig.blurLabelOpacity
-        }
-      }));
-
-      const newLinks = links.map((l, i) => ({
-        ...l,
-        lineStyle: {
-          opacity: highlightLinks.has(i) ? opacityConfig.highlightLine : opacityConfig.blurLine,
-          width: highlightLinks.has(i) ? highlightConfig.lineWidth : highlightConfig.normalLineWidth
-        }
-      }));
-
-      chart.setOption({
-        series: [{
-          data: newNodes,
-          links: newLinks
-        }]
-      });
+    if (params.componentType !== 'series' || params.seriesType !== 'sankey' || isAutoHighlighting) {
+      return;
     }
 
-    // 绑定 mouseover 和 mousemove 事件
-    chart.on('mouseover', handleHighlight);
-    chart.on('mousemove', handleHighlight);
+    // 尝试获取节点名称
+    let nodeName = null;
+    let edgeSource = null;
+    let edgeTarget = null;
 
-    // 鼠标移出时恢复原始状态
-    chart.on('mouseout', function(params) {
-      if (params.componentType === 'series' && params.seriesType === 'sankey' && !isAutoHighlighting) {
-        restoreOriginalState();
+    // 首先检查是否是线条（通过 data.source !== undefined 判断，优先于其他检测）
+    if (params.data && params.data.source !== undefined && params.data.target !== undefined) {
+      edgeSource = params.data.source;
+      edgeTarget = params.data.target;
+      // 线条悬停时，使用 target 作为主要节点
+      nodeName = edgeTarget;
+    } else {
+      // 尝试从多个位置获取节点 id 或 name
+      // params.data 存在且有 id
+      if (params.data && (params.data.id || params.data.name)) {
+        nodeName = params.data.id || params.data.name;
       }
-    });
-
-    // 使用 zrender 底层事件捕获标签悬停
-    chart.getZr().on('mousemove', function(event) {
-      if (isAutoHighlighting) return;
-
-      // 尝试通过 containPixel 检测
-      const point = [event.offsetX, event.offsetY];
-      if (chart.containPixel({ seriesIndex: 0 }, point)) {
-        // 如果在系列区域内，触发高亮检查
-        // 这里我们依赖 chart.on('mousemove') 已经处理了大部分情况
-      } else {
-        // 鼠标不在系列区域内，恢复原始状态
-        restoreOriginalState();
-      }
-    });
-
-    // 左侧渠道依次高亮效果（一圈后停止）
-    let highlightIndex = -1;
-    let highlightInterval = null;
-    let highlightCount = 0;
-    let isAutoHighlighting = false;
-    const leftNodeNames = getSortedLeftChannels().map(ch => `left_${ch}`);
-
-    function highlightLeftChannel() {
-      // 隐藏上一个 tooltip
-      chart.dispatchAction({
-        type: 'hideTip'
-      });
-
-      // 取消上一个高亮
-      if (highlightIndex >= 0) {
-        chart.dispatchAction({
-          type: 'downplay',
-          dataIndex: highlightIndex
-        });
-      }
-
-      // 移动到下一个
-      highlightIndex = (highlightIndex + 1) % leftNodeNames.length;
-      highlightCount++;
-      isAutoHighlighting = true;
-
-      // 获取当前要高亮的节点名
-      const currentNodeName = leftNodeNames[highlightIndex];
-      
-      // 使用自定义高亮逻辑
-      highlightRelatedNodes(currentNodeName);
-
-      // 显示 tooltip
-      chart.dispatchAction({
-        type: 'showTip',
-        seriesIndex: 0,
-        dataIndex: highlightIndex
-      });
-
-      // 完成一圈后延迟停止，让最后一个渠道也能完整显示
-      if (highlightCount >= leftNodeNames.length) {
-        setTimeout(() => {
-          stopHighlight();
-          // 恢复原始状态
-          restoreOriginalState();
-        }, isMobile ? highlightConfig.autoInterval * 0.67 : highlightConfig.lastShowDelay);
+      // params.name 存在
+      else if (params.name) {
+        nodeName = params.name;
       }
     }
-    
-    // 高亮相关节点的函数
-    function highlightRelatedNodes(nodeName) {
-      const channelName = nodeNameMap[nodeName];
-      
-      // 找到所有需要高亮的节点和链接
-      const highlightNodes = new Set();
-      const highlightLinks = new Set();
-      
-      highlightNodes.add(nodeName);
-      
-      // 找到同名渠道
-      const sameNameNodes = nodes.filter(n => nodeNameMap[n.id] === channelName);
+
+    if (!nodeName) return;
+
+    // 如果 nodeName 是显示名称（如"京东"），查找对应的内部名称
+    // 优先根据前缀匹配：左侧标签匹配 left_xxx，右侧标签匹配 right_xxx
+    if (!nodeNameMap[nodeName]) {
+      let leftMatch = null;
+      let rightMatch = null;
+      // 反向查找：显示名称 -> 内部名称（需要在originalNodeNameMap中查找）
+      for (const [key, value] of Object.entries(originalNodeNameMap)) {
+        if (value === nodeName) {
+          if (key.startsWith('left_')) {
+            leftMatch = key;
+            break; // 优先匹配左侧，找到即停止
+          } else if (key.startsWith('right_')) {
+            rightMatch = key;
+          }
+        }
+      }
+      // 如果找到左侧匹配用左侧，否则用右侧匹配
+      nodeName = leftMatch || rightMatch;
+    }
+
+    // 再次检查是否存在
+    if (!nodeName || !originalNodeNameMap[nodeName]) return;
+
+    const channelName = originalNodeNameMap[nodeName];
+
+    // 找到所有需要高亮的节点和链接
+    const highlightNodes = new Set();
+    const highlightLinks = new Set();
+
+    // 高亮当前节点
+    highlightNodes.add(nodeName);
+
+    // 如果是线条悬停，直接高亮该线条
+    if (edgeSource && edgeTarget) {
+      links.forEach((link, index) => {
+        if (link.source === edgeSource && link.target === edgeTarget) {
+          highlightLinks.add(index);
+          highlightNodes.add(edgeSource);
+          highlightNodes.add(edgeTarget);
+        }
+      });
+    } else {
+      // 节点悬停逻辑：找到同名渠道（跨左右两侧）
+      const sameNameNodes = nodes.filter(n => originalNodeNameMap[n.id] === channelName);
       sameNameNodes.forEach(n => highlightNodes.add(n.id));
-      
+
       // 找到所有与当前节点相关的链接
       links.forEach((link, index) => {
         if (link.source === nodeName || link.target === nodeName) {
           highlightLinks.add(index);
           highlightNodes.add(link.source);
           highlightNodes.add(link.target);
-          
+
+          // 对于右侧节点，高亮其下游节点
           if (link.source === nodeName) {
             const findDownstream = (target) => {
               links.forEach((l, i) => {
@@ -845,7 +709,8 @@
             };
             findDownstream(link.target);
           }
-          
+
+          // 对于左侧节点，高亮其上游节点
           if (link.target === nodeName) {
             const findUpstream = (source) => {
               links.forEach((l, i) => {
@@ -861,95 +726,251 @@
           }
         }
       });
-      
-      // 构建新的 series 数据
-      const newNodes = nodes.map(n => ({
-        ...n,
-        itemStyle: {
-          ...n.itemStyle,
-          opacity: highlightNodes.has(n.id) ? highlightConfig.nodeOpacity : highlightConfig.blurNodeOpacity
-        },
-        label: {
-          ...n.label,
-          opacity: highlightNodes.has(n.id) ? highlightConfig.labelOpacity : highlightConfig.blurLabelOpacity
-        }
-      }));
-
-      const newLinks = links.map((l, i) => ({
-        ...l,
-        lineStyle: {
-          opacity: highlightLinks.has(i) ? opacityConfig.highlightLine : opacityConfig.blurLine,
-          width: highlightLinks.has(i) ? highlightConfig.lineWidth : highlightConfig.normalLineWidth
-        }
-      }));
-      
-      chart.setOption({
-        series: [{
-          data: newNodes,
-          links: newLinks
-        }]
-      });
-    }
-    
-    // 恢复原始状态
-    function restoreOriginalState() {
-      const originalNodes = nodes.map(n => ({
-        ...n,
-        itemStyle: {
-          ...n.itemStyle,
-          opacity: opacityConfig.nodeNormal
-        },
-        label: {
-          ...n.label,
-          opacity: highlightConfig.labelOpacity
-        }
-      }));
-
-      const originalLinks = links.map(l => ({
-        ...l,
-        lineStyle: {
-          opacity: opacityConfig.normal,
-          width: highlightConfig.normalLineWidth
-        }
-      }));
-      
-      chart.setOption({
-        series: [{
-          data: originalNodes,
-          links: originalLinks
-        }]
-      });
     }
 
-    function startHighlight() {
-      if (highlightInterval) return;
-      highlightInterval = setInterval(highlightLeftChannel, isMobile ? highlightConfig.autoInterval * 0.67 : highlightConfig.autoInterval);
-    }
-
-    function stopHighlight() {
-      if (highlightInterval) {
-        clearInterval(highlightInterval);
-        highlightInterval = null;
+    // 构建新的 series 数据，设置透明度
+    const newNodes = nodes.map(n => ({
+      ...n,
+      itemStyle: {
+        ...n.itemStyle,
+        opacity: highlightNodes.has(n.id) ? highlightConfig.nodeOpacity : highlightConfig.blurNodeOpacity
+      },
+      label: {
+        ...n.label,
+        opacity: highlightNodes.has(n.id) ? highlightConfig.labelOpacity : highlightConfig.blurLabelOpacity
       }
-      isAutoHighlighting = false;
-      // 隐藏 tooltip
+    }));
+
+    const newLinks = links.map((l, i) => ({
+      ...l,
+      lineStyle: {
+        opacity: highlightLinks.has(i) ? opacityConfig.highlightLine : opacityConfig.blurLine,
+        width: highlightLinks.has(i) ? highlightConfig.lineWidth : highlightConfig.normalLineWidth
+      }
+    }));
+
+    chart.setOption({
+      series: [{
+        data: newNodes,
+        links: newLinks
+      }]
+    });
+  }
+
+  // 绑定 mouseover 和 mousemove 事件
+  chart.on('mouseover', handleHighlight);
+  chart.on('mousemove', handleHighlight);
+
+  // 鼠标移出时恢复原始状态
+  chart.on('mouseout', function(params) {
+    if (params.componentType === 'series' && params.seriesType === 'sankey' && !isAutoHighlighting) {
+      restoreOriginalState();
+    }
+  });
+
+  // 使用 zrender 底层事件捕获标签悬停
+  chart.getZr().on('mousemove', function(event) {
+    if (isAutoHighlighting) return;
+
+    // 尝试通过 containPixel 检测
+    const point = [event.offsetX, event.offsetY];
+    if (chart.containPixel({ seriesIndex: 0 }, point)) {
+      // 如果在系列区域内，触发高亮检查
+      // 这里我们依赖 chart.on('mousemove') 已经处理了大部分情况
+    } else {
+      // 鼠标不在系列区域内，恢复原始状态
+      restoreOriginalState();
+    }
+  });
+
+  // 左侧渠道依次高亮效果（一圈后停止）
+  let highlightIndex = -1;
+  let highlightInterval = null;
+  let highlightCount = 0;
+  let isAutoHighlighting = false;
+  const leftNodeNames = getSortedLeftChannels().map(ch => `left_${ch}`);
+
+  function highlightLeftChannel() {
+    // 隐藏上一个 tooltip
+    chart.dispatchAction({
+      type: 'hideTip'
+    });
+
+    // 取消上一个高亮
+    if (highlightIndex >= 0) {
       chart.dispatchAction({
-        type: 'hideTip'
+        type: 'downplay',
+        dataIndex: highlightIndex
       });
     }
 
-    // 鼠标移入停止，移出继续
-    chart.getZr().on('mouseenter', function() {
-      stopHighlight();
-    });
-    chart.getZr().on('mouseleave', function() {
-      restoreOriginalState();
-      startHighlight();
+    // 移动到下一个
+    highlightIndex = (highlightIndex + 1) % leftNodeNames.length;
+    highlightCount++;
+    isAutoHighlighting = true;
+
+    // 获取当前要高亮的节点名
+    const currentNodeName = leftNodeNames[highlightIndex];
+
+    // 使用自定义高亮逻辑
+    highlightRelatedNodes(currentNodeName);
+
+    // 显示 tooltip
+    chart.dispatchAction({
+      type: 'showTip',
+      seriesIndex: 0,
+      dataIndex: highlightIndex
     });
 
-    // 启动高亮轮播
+    // 完成一圈后延迟停止，让最后一个渠道也能完整显示
+    if (highlightCount >= leftNodeNames.length) {
+      setTimeout(() => {
+        stopHighlight();
+        // 恢复原始状态
+        restoreOriginalState();
+      }, isMobile ? highlightConfig.autoInterval * 0.67 : highlightConfig.lastShowDelay);
+    }
+  }
+
+  // 高亮相关节点的函数
+  function highlightRelatedNodes(nodeName) {
+    const channelName = originalNodeNameMap[nodeName];
+
+    // 找到所有需要高亮的节点和链接
+    const highlightNodes = new Set();
+    const highlightLinks = new Set();
+
+    highlightNodes.add(nodeName);
+
+    // 找到同名渠道
+    const sameNameNodes = nodes.filter(n => originalNodeNameMap[n.id] === channelName);
+    sameNameNodes.forEach(n => highlightNodes.add(n.id));
+
+    // 找到所有与当前节点相关的链接
+    links.forEach((link, index) => {
+      if (link.source === nodeName || link.target === nodeName) {
+        highlightLinks.add(index);
+        highlightNodes.add(link.source);
+        highlightNodes.add(link.target);
+
+        if (link.source === nodeName) {
+          const findDownstream = (target) => {
+            links.forEach((l, i) => {
+              if (l.source === target) {
+                highlightLinks.add(i);
+                highlightNodes.add(l.source);
+                highlightNodes.add(l.target);
+                findDownstream(l.target);
+              }
+            });
+          };
+          findDownstream(link.target);
+        }
+
+        if (link.target === nodeName) {
+          const findUpstream = (source) => {
+            links.forEach((l, i) => {
+              if (l.target === source) {
+                highlightLinks.add(i);
+                highlightNodes.add(l.source);
+                highlightNodes.add(l.target);
+                findUpstream(l.source);
+              }
+            });
+          };
+          findUpstream(link.source);
+        }
+      }
+    });
+
+    // 构建新的 series 数据
+    const newNodes = nodes.map(n => ({
+      ...n,
+      itemStyle: {
+        ...n.itemStyle,
+        opacity: highlightNodes.has(n.id) ? highlightConfig.nodeOpacity : highlightConfig.blurNodeOpacity
+      },
+      label: {
+        ...n.label,
+        opacity: highlightNodes.has(n.id) ? highlightConfig.labelOpacity : highlightConfig.blurLabelOpacity
+      }
+    }));
+
+    const newLinks = links.map((l, i) => ({
+      ...l,
+      lineStyle: {
+        opacity: highlightLinks.has(i) ? opacityConfig.highlightLine : opacityConfig.blurLine,
+        width: highlightLinks.has(i) ? highlightConfig.lineWidth : highlightConfig.normalLineWidth
+      }
+    }));
+
+    chart.setOption({
+      series: [{
+        data: newNodes,
+        links: newLinks
+      }]
+    });
+  }
+
+  // 恢复原始状态
+  function restoreOriginalState() {
+    const originalNodes = nodes.map(n => ({
+      ...n,
+      itemStyle: {
+        ...n.itemStyle,
+        opacity: opacityConfig.nodeNormal
+      },
+      label: {
+        ...n.label,
+        opacity: highlightConfig.labelOpacity
+      }
+    }));
+
+    const originalLinks = links.map(l => ({
+      ...l,
+      lineStyle: {
+        opacity: opacityConfig.normal,
+        width: highlightConfig.normalLineWidth
+      }
+    }));
+
+    chart.setOption({
+      series: [{
+        data: originalNodes,
+        links: originalLinks
+      }]
+    });
+  }
+
+  function startHighlight() {
+    if (highlightInterval) return;
+    highlightInterval = setInterval(highlightLeftChannel, isMobile ? highlightConfig.autoInterval * 0.67 : highlightConfig.autoInterval);
+  }
+
+  function stopHighlight() {
+    if (highlightInterval) {
+      clearInterval(highlightInterval);
+      highlightInterval = null;
+    }
+    isAutoHighlighting = false;
+    // 隐藏 tooltip
+    chart.dispatchAction({
+      type: 'hideTip'
+    });
+  }
+
+  // 鼠标移入停止，移出继续
+  chart.getZr().on('mouseenter', function() {
+    stopHighlight();
+  });
+  chart.getZr().on('mouseleave', function() {
+    restoreOriginalState();
     startHighlight();
-  </script>
+  });
+
+  // 启动高亮轮播
+  startHighlight();
+</script>
 </body>
 
 </html>
