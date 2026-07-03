@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>FY26上半年渠道用户流向桑基图</title>
+  <title>用户流向桑基图</title>
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
   <style>
     * {
@@ -113,7 +113,8 @@
   <select class="toolbar-select" id="pageSelector" onchange="navigateToPage()">
     <option value="" disabled selected>切换到</option>
     <option value="channelUsers(FY24-25)_special.html">FY24 to FY25 用户流向（转移率+其他渠道转入）</option>
-    <option value="channelUsers(FY24-25).html">FY24 to FY25 用户流向</option>
+    <option value="channelUsers(FY24-25)_remain.html">FY24 to FY25 用户流向（留存率+其他渠道转入）</option>
+    <option value="channelUsers(FY24-25).html">FY24 to FY25 用户流向（休眠率+其他渠道转入）</option>
     <option value="channelUsers.html">FY25 2H to FY26 1H 用户流向（其他渠道：天猫官旗、官微、淘宝直充等）</option>
   </select>
 </div>
@@ -207,13 +208,13 @@
     right_Rest: 'Rest'
   };
 
-  // 节点名称映射（内部唯一节点名 → 当前展示名称，左侧包含流失率）
+  // 节点名称映射（内部唯一节点名 → 当前展示名称，左侧包含休眠率）
   const nodeNameMap = {};  // 将在buildLeftNodes和buildRightNodes后动态填充
 
   // ---------- 文字配置 ----------
-  const CONFIG_TITLE = 'FY24 to FY25 用户流向';
-  const CONFIG_LEFT_SUBTITLE = 'FY24 渠道用户数\n用户流失率升序';
-  const CONFIG_RIGHT_SUBTITLE = 'FY25 渠道用户数(本渠道+其他渠道转入)\n用户增长率降序';
+  const CONFIG_TITLE = 'FY24 to FY25 用户流向（休眠率+其他渠道转入）';
+  const CONFIG_LEFT_SUBTITLE = 'FY24 渠道用户数\n用户休眠率升序';
+  const CONFIG_RIGHT_SUBTITLE = 'FY25 渠道用户数(本渠道+其他渠道转入)\n其他渠道转入人数降序';
   const CONFIG_FONT_COLOR = '#FFFFFF';
   const CONFIG_FONT_FAMILY = 'Helvetica, Arial, sans-serif';
 
@@ -240,7 +241,7 @@
     labelWidth: 200,         // 标签宽度（增加以容纳长名称）
     line_color: 'gradient',  // 线条颜色
     nodeGap: 30,             // 节点之间的最小间隙
-    minNodeHeight: 25,       // 节点最小高度
+    minNodeHeight: 50,       // 节点最小高度
     labelDistance: 8         // 标签与节点的距离
   };
 
@@ -427,7 +428,7 @@
   const leftChannels = [...new Set(links.map(l => l.source.replace('left_', '')))];
   const rightChannels = [...new Set(links.map(l => l.target.replace('right_', '')))];
 
-  // 计算渠道流失率
+  // 计算渠道休眠率
   function getLossRate(channel) {
     const sourceLinks = links.filter(l => l.source === `left_${channel}` && l.target === 'right_Lost Users');
     const lossVal = sourceLinks.length > 0 ? sourceLinks[0].value : 0;
@@ -436,13 +437,25 @@
     return totalVal > 0 ? lossVal / totalVal : 0;
   }
 
+  // 计算渠道转移率（转移到除Lost Users和自己的其他渠道的比例）
+  function getTransferRate(channel) {
+    const sourceLinks = links.filter(l => l.source === `left_${channel}`);
+    const totalVal = sourceLinks.reduce((sum, l) => sum + l.value, 0);
+
+    // 排除流向Lost Users和流向自己的链接
+    const transferLinks = sourceLinks.filter(l => l.target !== 'right_Lost Users' && l.target !== `right_${channel}`);
+    const transferVal = transferLinks.reduce((sum, l) => sum + l.value, 0);
+
+    return totalVal > 0 ? transferVal / totalVal : 0;
+  }
+
   // 获取渠道总用户数（流出量）
   function getTotalOutflow(channel) {
     const sourceLinks = links.filter(l => l.source === `left_${channel}`);
     return sourceLinks.reduce((sum, l) => sum + l.value, 0);
   }
 
-  // 获取排序后的左侧渠道：按流失率升序，流失率相同时按用户数降序
+  // 获取排序后的左侧渠道：按休眠率升序，休眠率相同时按用户数降序
   function getSortedLeftChannels() {
     const channelStats = [];
     leftChannels.forEach(ch => {
@@ -467,34 +480,25 @@
     return channelStats.map(c => c.name);
   }
 
-  // 获取排序后的右侧渠道：按用户增长率降序，Lost Users在最下方
+  // 获取排序后的右侧渠道：按转入人数降序，Lost Users在最下方
   function getSortedRightChannels() {
     const channelStats = [];
     rightChannels.forEach(ch => {
       if (ch !== 'Lost Users') {
-        // 计算流入量（右侧该渠道的总用户数）
-        const targetLinks = links.filter(l => l.target === `right_${ch}`);
-        const inflowVal = targetLinks.reduce((sum, l) => sum + l.value, 0);
-        // 计算流出量（左侧该渠道的原用户数）
-        const sourceLinks = links.filter(l => l.source === `left_${ch}`);
-        const outflowVal = sourceLinks.reduce((sum, l) => sum + l.value, 0);
-        // 计算增长率 = (流入 - 流出) / 流出，左侧没有则为 Infinity
-        const growthRate = outflowVal > 0 ? (inflowVal - outflowVal) / outflowVal : Infinity;
+        // 计算其他渠道转入人数（不包括新增渠道FY26 1H New，也不包括自己）
+        const targetLinks = links.filter(l => l.target === `right_${ch}` &&
+                                          l.source !== 'left_FY26_1H_New' &&
+                                          l.source !== `left_${ch}`);
+        const inflowFromOtherChannels = targetLinks.reduce((sum, l) => sum + l.value, 0);
+
         channelStats.push({
           name: ch,
-          inflowVal: inflowVal,
-          outflowVal: outflowVal,
-          growthRate: growthRate
+          inflowFromOtherChannels: inflowFromOtherChannels
         });
       }
     });
-    // 按增长率降序排列，增长率相同（如都是Infinity）则按流入量降序
-    channelStats.sort((a, b) => {
-      if (b.growthRate !== a.growthRate) {
-        return b.growthRate - a.growthRate;
-      }
-      return b.inflowVal - a.inflowVal;
-    });
+    // 按转入人数降序排列
+    channelStats.sort((a, b) => b.inflowFromOtherChannels - a.inflowFromOtherChannels);
     return [...channelStats.map(c => c.name), 'Lost Users'];
   }
 
@@ -504,19 +508,23 @@
       const channelId = `left_${ch}`;
       const showName = ch === 'FY26_1H_New' ? 'FY26 1H New' : ch;
 
-      // 计算流失率
+      // 计算休眠率
       const lossRate = getLossRate(ch);
-      const lossRatePercent = (lossRate * 100).toFixed(2);
+      const lossRatePercent = (lossRate * 100).toFixed(0);
 
-      // 在渠道名称后添加流失率
-      const displayName = `${showName} (${lossRatePercent}%)`;
+      // 计算转移率
+      const transferRate = getTransferRate(ch);
+      const transferRatePercent = (transferRate * 100).toFixed(0);
+
+      // 在渠道名称后添加休眠率
+      const displayName = `${showName} \n休眠率:${lossRatePercent}%`;
 
       // 更新nodeNameMap
       nodeNameMap[channelId] = displayName;
 
       return {
         id: channelId,      // 唯一标识符
-        name: displayName,   // 显示名称（包含流失率）
+        name: displayName,   // 显示名称（包含休眠率）
         label: {
           formatter: displayName,
           position: 'left',
@@ -535,16 +543,47 @@
     const rightNodes = getSortedRightChannels().map(ch => {
       const channelId = `right_${ch}`;
 
+      // 计算其他渠道流入人数（不包括新增渠道FY26 1H New，也不包括自己）
+      const targetLinks = links.filter(l => l.target === channelId &&
+                                        l.source !== 'left_FY26_1H_New' &&
+                                        l.source !== `left_${ch}`);
+      const inflowFromOtherChannels = targetLinks.reduce((sum, l) => sum + l.value, 0).toLocaleString('en-US');
+
       // 更新nodeNameMap
       nodeNameMap[channelId] = ch;
+
+      // Lost Users 不显示流入信息
+      if (ch === 'Lost Users') {
+        return {
+          id: channelId,      // 唯一标识符
+          name: ch,            // 显示名称
+          label: {
+            formatter: ch,
+            position: 'right',
+            color: CONFIG_FONT_COLOR
+          },
+          depth: 1,
+          itemStyle: { color: channelColorMap.get(ch) }
+        };
+      }
 
       return {
         id: channelId,      // 唯一标识符
         name: ch,            // 显示名称
         label: {
-          formatter: ch,
+          formatter: `{a|${ch}}\n{b|其他渠道转入:${inflowFromOtherChannels}人}`,
           position: 'right',
-          color: CONFIG_FONT_COLOR
+          color: CONFIG_FONT_COLOR,
+          rich: {
+            a: {
+              color: CONFIG_FONT_COLOR,
+              fontSize: isMobile ? mobileConfig.labelFontSize : 14
+            },
+            b: {
+              color: CONFIG_FONT_COLOR,
+              fontSize: isMobile ? mobileConfig.labelFontSize - 1 : 14
+            }
+          }
         },
         depth: 1,
         itemStyle: { color: channelColorMap.get(ch) }
@@ -649,6 +688,7 @@
         // 遍历所有连线，找出当前节点所有流入、流出数据
         const relatedLinks = [];
         let lossCount = 0;
+        let transCount = 0;
         links.forEach(link => {
           const sourceName = originalNodeNameMap[link.source];
           const targetName = originalNodeNameMap[link.target];
@@ -660,8 +700,13 @@
               isLoss: targetName === 'Lost Users',
               isFY26New: sourceName === 'FY26 1H New'
             });
-            if (targetName === 'Lost Users') {
-              lossCount += link.value;
+            // 对于左侧节点，计算休眠和转移（排除流向自己）
+            if (nodeKey.startsWith('left_')) {
+              if (targetName === 'Lost Users') {
+                lossCount += link.value;
+              } else if (link.target !== nodeKey.replace('left_', 'right_')) {  // 排除流向自己
+                transCount += link.value;
+              }
             }
           }
         });
@@ -689,27 +734,21 @@
 
         tip += '</table>';
 
-        // 添加流失率（仅左侧渠道显示）
+        // 添加休眠率（仅左侧渠道显示）
         if (lossCount > 0 && params.value > 0 && nodeKey.startsWith('left_')) {
-          tip += `\n流失率：${((lossCount / params.value) * 100).toFixed(2)}%`;
+          tip += `<div>休眠率：${((lossCount / params.value) * 100).toFixed(0)}%</div>`;
         }
 
-        // 添加增长率（仅右侧渠道显示）
+        // 添加转入信息（仅右侧渠道显示）
         if (nodeKey.startsWith('right_') && nodeShowName !== 'Lost Users') {
-          const targetLinks = links.filter(l => l.target === nodeKey);
-          const inflowVal = targetLinks.reduce((sum, l) => sum + l.value, 0);
-          // 查找对应的左侧渠道
-          const leftNodeKey = nodeKey.replace('right_', 'left_');
-          const sourceLinks = links.filter(l => l.source === leftNodeKey);
-          const outflowVal = sourceLinks.reduce((sum, l) => sum + l.value, 0);
-          if (outflowVal > 0) {
-            const growthRate = ((inflowVal - outflowVal) / outflowVal) * 100;
-            const sign = growthRate >= 0 ? '+' : '';
-            tip += `\n增长率：${sign}${growthRate.toFixed(2)}%`;
-          } else {
-            // 左侧没有该渠道（纯新增渠道），增长率为无穷大
-            tip += `\n增长率：∞（新增）`;
-          }
+          const ch = nodeKey.replace('right_', '');
+          // 计算其他渠道转入人数（不包括新增渠道FY26 1H New，也不包括自己）
+          const targetLinks = links.filter(l => l.target === nodeKey &&
+                                            l.source !== 'left_FY26_1H_New' &&
+                                            l.source !== `left_${ch}`);
+          const inflowFromOtherChannels = targetLinks.reduce((sum, l) => sum + l.value, 0).toLocaleString('en-US');
+
+          tip += `\n其他渠道转入：${fmt(inflowFromOtherChannels)}人`;
         }
 
         return tip;

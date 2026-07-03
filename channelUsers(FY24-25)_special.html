@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>FY26上半年渠道用户流向桑基图</title>
+  <title>用户流向桑基图</title>
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
   <style>
     * {
@@ -111,9 +111,9 @@
 <body>
 <div class="toolbar">
   <select class="toolbar-select" id="pageSelector" onchange="navigateToPage()">
-    <option value="" disabled selected>切换到</option>
     <option value="channelUsers(FY24-25)_special.html">FY24 to FY25 用户流向（转移率+其他渠道转入）</option>
-    <option value="channelUsers(FY24-25).html">FY24 to FY25 用户流向</option>
+    <option value="channelUsers(FY24-25)_remain.html">FY24 to FY25 用户流向（留存率+其他渠道转入）</option>
+    <option value="channelUsers(FY24-25).html">FY24 to FY25 用户流向（休眠率+其他渠道转入）</option>
     <option value="channelUsers.html">FY25 2H to FY26 1H 用户流向（其他渠道：天猫官旗、官微、淘宝直充等）</option>
   </select>
 </div>
@@ -212,7 +212,7 @@
 
   // ---------- 文字配置 ----------
   const CONFIG_TITLE = 'FY24 to FY25 用户流向（转移率+其他渠道转入）';
-  const CONFIG_LEFT_SUBTITLE = 'FY24 渠道用户数\n用户流失率升序';
+  const CONFIG_LEFT_SUBTITLE = 'FY24 渠道用户数\n用户转移率升序';
   const CONFIG_RIGHT_SUBTITLE = 'FY25 渠道用户数(本渠道+其他渠道转入)\n其他渠道转入人数降序';
   const CONFIG_FONT_COLOR = '#FFFFFF';
   const CONFIG_FONT_FAMILY = 'Helvetica, Arial, sans-serif';
@@ -454,23 +454,23 @@
     return sourceLinks.reduce((sum, l) => sum + l.value, 0);
   }
 
-  // 获取排序后的左侧渠道：按流失率升序，流失率相同时按用户数降序
+  // 获取排序后的左侧渠道：按转移率升序，转移率相同时按用户数降序
   function getSortedLeftChannels() {
     const channelStats = [];
     leftChannels.forEach(ch => {
-      const lossLinks = links.filter(l => l.source === `left_${ch}` && l.target === 'right_Lost Users');
-      const lossVal = lossLinks.length > 0 ? lossLinks[0].value : 0;
       const totalLinks = links.filter(l => l.source === `left_${ch}`);
       const totalVal = totalLinks.reduce((sum, l) => sum + l.value, 0);
+      const transferLinks = totalLinks.filter(l => l.target !== 'right_Lost Users' && l.target !== `right_${ch}`);
+      const transferVal = transferLinks.reduce((sum, l) => sum + l.value, 0);
       channelStats.push({
         name: ch,
-        lossVal: lossVal,
+        transferVal: transferVal,
         totalVal: totalVal
       });
     });
     channelStats.sort((a, b) => {
-      const rateA = a.lossVal * b.totalVal;
-      const rateB = b.lossVal * a.totalVal;
+      const rateA = a.transferVal * b.totalVal;
+      const rateB = b.transferVal * a.totalVal;
       if (rateA !== rateB) {
         return rateA - rateB;
       }
@@ -516,7 +516,7 @@
       const transferRatePercent = (transferRate * 100).toFixed(0);
 
       // 在渠道名称后添加流失率
-      const displayName = `${showName} \n流失率:${lossRatePercent}%、转移率:${transferRatePercent}%`;
+      const displayName = `${showName} \n转移率:${transferRatePercent}%`;
 
       // 更新nodeNameMap
       nodeNameMap[channelId] = displayName;
@@ -735,7 +735,7 @@
 
         // 添加流失率（仅左侧渠道显示）
         if (lossCount > 0 && params.value > 0 && nodeKey.startsWith('left_')) {
-          tip += `<div>流失率：${((lossCount / params.value) * 100).toFixed(0)}%</div><div>转移率：${((transCount / params.value) * 100).toFixed(0)}%</div>`;
+          tip += `<div>转移率：${((transCount / params.value) * 100).toFixed(0)}%</div>`;
         }
 
         // 添加转入信息（仅右侧渠道显示）

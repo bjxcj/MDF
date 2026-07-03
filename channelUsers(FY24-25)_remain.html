@@ -153,68 +153,68 @@
   // ========== 主题配置 ==========
   // 渠道配色全局映射，同名渠道两侧颜色完全一致
   const channelColorMap = new Map([
-    ['京东', '#E31D1A'],
-    ['抖音电商', '#37A2DA'],
-    ['微信直充', '#07C160'],
-    ['天猫天机平台', '#B80037'],
-    ['腾瑞明B2B', '#FFDB5C'],
-    ['福禄B2B', '#ff9f7f'],
-    ['天猫', '#fb7293'],
-    ['京东B2B', '#9FE6B8'],
-    ['资和信B2B', '#E690D1'],
+    ['JD', '#E31D1A'],
+    ['Douyin', '#37A2DA'],
+    ['WeChat 3PTU', '#07C160'],
+    ['TMall-Tianji', '#B80037'],
+    ['Carrier', '#FFDB5C'],
+    ['Channel Partner', '#ff9f7f'],
+    ['TMall', '#fb7293'],
+    ['JDB2B', '#9FE6B8'],
+    ['P&C B2B', '#E690D1'],
     ['微信', '#e7bcf3'],
-    ['拼多多', '#8378EA'],
+    ['PDD', '#8378EA'],
     ['字节宝B2B', '#96BFFF'],
-    ['淘宝', '#5470c6'],
+    ['Alipay&Taobao', '#5470c6'],
     ['沐晓B2B', '#91cc75'],
     ['FY26 1H New', '#32C5E9'],
-    ['流失', '#83787f'],
-    ['其他渠道', '#7f454c']
+    ['Lost Users', '#83787f'],
+    ['Rest', '#7f454c']
   ]);
 
   // 节点名称映射（内部唯一节点名 → 原始展示名称，用于tooltip等需要原始名称的地方）
   const originalNodeNameMap = {
-    left_京东: '京东',
-    left_抖音电商: '抖音电商',
-    left_微信直充: '微信直充',
-    left_天猫天机平台: '天猫天机平台',
-    left_腾瑞明B2B: '腾瑞明B2B',
-    left_福禄B2B: '福禄B2B',
-    left_天猫: '天猫',
-    left_京东B2B: '京东B2B',
-    left_资和信B2B: '资和信B2B',
+    left_JD: 'JD',
+    left_Douyin: 'Douyin',
+    'left_WeChat 3PTU': 'WeChat 3PTU',
+    'left_TMall-Tianji': 'TMall-Tianji',
+    left_Carrier: 'Carrier',
+    'left_Channel Partner': 'Channel Partner',
+    left_TMall: 'TMall',
+    left_JDB2B: 'JDB2B',
+    'left_P&C B2B': 'P&C B2B',
     left_微信: '微信',
-    left_拼多多: '拼多多',
+    left_PDD: 'PDD',
     left_字节宝B2B: '字节宝B2B',
-    left_淘宝: '淘宝',
+    'left_Alipay&Taobao': 'Alipay&Taobao',
     left_沐晓B2B: '沐晓B2B',
     left_FY26_1H_New: 'FY26 1H New',
-    left_其他渠道: '其他渠道',
-    right_京东: '京东',
-    right_抖音电商: '抖音电商',
-    right_微信直充: '微信直充',
-    right_天猫天机平台: '天猫天机平台',
-    right_腾瑞明B2B: '腾瑞明B2B',
-    right_福禄B2B: '福禄B2B',
-    right_天猫: '天猫',
-    right_京东B2B: '京东B2B',
-    right_资和信B2B: '资和信B2B',
+    left_Rest: 'Rest',
+    right_JD: 'JD',
+    right_Douyin: 'Douyin',
+    'right_WeChat 3PTU': 'WeChat 3PTU',
+    'right_TMall-Tianji': 'TMall-Tianji',
+    right_Carrier: 'Carrier',
+    'right_Channel Partner': 'Channel Partner',
+    right_TMall: 'TMall',
+    right_JDB2B: 'JDB2B',
+    'right_P&C B2B': 'P&C B2B',
     right_微信: '微信',
-    right_拼多多: '拼多多',
+    right_PDD: 'PDD',
     right_字节宝B2B: '字节宝B2B',
-    right_淘宝: '淘宝',
+    'right_Alipay&Taobao': 'Alipay&Taobao',
     right_沐晓B2B: '沐晓B2B',
-    right_流失: '流失',
-    right_其他渠道: '其他渠道'
+    'right_Lost Users': 'Lost Users',
+    right_Rest: 'Rest'
   };
 
-  // 节点名称映射（内部唯一节点名 → 当前展示名称，左侧包含流失率）
+  // 节点名称映射（内部唯一节点名 → 当前展示名称，左侧包含留存率）
   const nodeNameMap = {};  // 将在buildLeftNodes和buildRightNodes后动态填充
 
   // ---------- 文字配置 ----------
-  const CONFIG_TITLE = 'FY25 2H to FY26 1H 用户流向（其他渠道：天猫官旗、官微、淘宝直充等）';
-  const CONFIG_LEFT_SUBTITLE = 'FY25 2H 渠道用户数\n用户流失率升序';
-  const CONFIG_RIGHT_SUBTITLE = 'FY26 1H 渠道用户数(本渠道+其他渠道转入)\n用户增长率降序';
+  const CONFIG_TITLE = 'FY24 to FY25 用户流向（留存率+其他渠道转入）';
+  const CONFIG_LEFT_SUBTITLE = 'FY24 渠道用户数\n用户留存率降序';
+  const CONFIG_RIGHT_SUBTITLE = 'FY25 渠道用户数(本渠道+其他渠道转入)\n其他渠道转入人数降序';
   const CONFIG_FONT_COLOR = '#FFFFFF';
   const CONFIG_FONT_FAMILY = 'Helvetica, Arial, sans-serif';
 
@@ -234,17 +234,20 @@
     nodeAlign: 'justify',    // 节点对齐方式
     layoutIterations: 0,     // 布局迭代次数
     curveness: 0.5,          // 线条弯曲度
-    leftPadding: 150,        // 左侧内边距
-    rightPadding: 150,       // 右侧内边距
+    leftPadding: 200,        // 左侧内边距
+    rightPadding: 200,       // 右侧内边距
     topPadding: 100,          // 顶部内边距
     bottomPadding: 0,        // 底部内边距
     labelWidth: 200,         // 标签宽度（增加以容纳长名称）
-    line_color:'gradient'  // 线条颜色
+    line_color: 'gradient',  // 线条颜色
+    nodeGap: 30,             // 节点之间的最小间隙
+    minNodeHeight: 50,       // 节点最小高度
+    labelDistance: 8         // 标签与节点的距离
   };
 
   // ---------- 移动端布局配置 ----------
   const mobileConfig = {
-     titleFontSize: 16,
+    titleFontSize: 16,
     subtitleFontSize: 10,
     subtitleLineHeight: 16,
     padding: 65,
@@ -287,63 +290,138 @@
 
   // 流向数据（静态）
   const links = [
-    { source: 'left_京东', target: 'right_京东', value:87833},
-{ source: 'left_京东', target: 'right_抖音电商', value:7138},
-{ source: 'left_京东', target: 'right_天猫天机平台', value:4593},
-{ source: 'left_京东', target: 'right_微信直充', value:1603},
-{ source: 'left_京东', target: 'right_福禄B2B', value:5988},
-{ source: 'left_京东', target: 'right_腾瑞明B2B', value:4397},
-{ source: 'left_京东', target: 'right_其他渠道', value:4425},
-{ source: 'left_京东', target: 'right_流失', value:776799},
-{ source: 'left_天猫天机平台', target: 'right_天猫天机平台', value:38015},
-{ source: 'left_天猫天机平台', target: 'right_京东', value:11061},
-{ source: 'left_天猫天机平台', target: 'right_抖音电商', value:4946},
-{ source: 'left_天猫天机平台', target: 'right_微信直充', value:908},
-{ source: 'left_天猫天机平台', target: 'right_福禄B2B', value:2737},
-{ source: 'left_天猫天机平台', target: 'right_腾瑞明B2B', value:1902},
-{ source: 'left_天猫天机平台', target: 'right_其他渠道', value:4485},
-{ source: 'left_天猫天机平台', target: 'right_流失', value:52728},
-{ source: 'left_抖音电商', target: 'right_抖音电商', value:31450},
-{ source: 'left_抖音电商', target: 'right_京东', value:6445},
-{ source: 'left_抖音电商', target: 'right_天猫天机平台', value:2390},
-{ source: 'left_抖音电商', target: 'right_微信直充', value:931},
-{ source: 'left_抖音电商', target: 'right_福禄B2B', value:1485},
-{ source: 'left_抖音电商', target: 'right_腾瑞明B2B', value:936},
-{ source: 'left_抖音电商', target: 'right_其他渠道', value:2133},
-{ source: 'left_抖音电商', target: 'right_流失', value:40129},
-{ source: 'left_微信直充', target: 'right_微信直充', value:260319},
-{ source: 'left_微信直充', target: 'right_京东', value:9124},
-{ source: 'left_微信直充', target: 'right_抖音电商', value:10697},
-{ source: 'left_微信直充', target: 'right_天猫天机平台', value:3958},
-{ source: 'left_微信直充', target: 'right_福禄B2B', value:1021},
-{ source: 'left_微信直充', target: 'right_腾瑞明B2B', value:791},
-{ source: 'left_微信直充', target: 'right_其他渠道', value:10641},
-{ source: 'left_微信直充', target: 'right_流失', value:443396},
-{ source: 'left_福禄B2B', target: 'right_福禄B2B', value:36189},
-{ source: 'left_福禄B2B', target: 'right_京东', value:12874},
-{ source: 'left_福禄B2B', target: 'right_抖音电商', value:4261},
-{ source: 'left_福禄B2B', target: 'right_天猫天机平台', value:3061},
-{ source: 'left_福禄B2B', target: 'right_微信直充', value:1269},
-{ source: 'left_福禄B2B', target: 'right_腾瑞明B2B', value:3170},
-{ source: 'left_福禄B2B', target: 'right_其他渠道', value:3141},
-{ source: 'left_福禄B2B', target: 'right_流失', value:135369},
-{ source: 'left_腾瑞明B2B', target: 'right_腾瑞明B2B', value:36533},
-{ source: 'left_腾瑞明B2B', target: 'right_京东', value:10290},
-{ source: 'left_腾瑞明B2B', target: 'right_抖音电商', value:2279},
-{ source: 'left_腾瑞明B2B', target: 'right_天猫天机平台', value:2103},
-{ source: 'left_腾瑞明B2B', target: 'right_微信直充', value:871},
-{ source: 'left_腾瑞明B2B', target: 'right_福禄B2B', value:2208},
-{ source: 'left_腾瑞明B2B', target: 'right_其他渠道', value:1907},
-{ source: 'left_腾瑞明B2B', target: 'right_流失', value:77143},
-{ source: 'left_其他渠道', target: 'right_其他渠道', value:79685},
-{ source: 'left_其他渠道', target: 'right_京东', value:8559},
-{ source: 'left_其他渠道', target: 'right_抖音电商', value:4841},
-{ source: 'left_其他渠道', target: 'right_天猫天机平台', value:3135},
-{ source: 'left_其他渠道', target: 'right_微信直充', value:4273},
-{ source: 'left_其他渠道', target: 'right_福禄B2B', value:2131},
-{ source: 'left_其他渠道', target: 'right_腾瑞明B2B', value:1457},
-{ source: 'left_其他渠道', target: 'right_流失', value:114465},
-
+    { source: 'left_JD', target: 'right_JD', value:98709},
+{ source: 'left_JD', target: 'right_WeChat 3PTU', value:9802},
+{ source: 'left_JD', target: 'right_TMall-Tianji', value:9731},
+{ source: 'left_JD', target: 'right_Alipay&Taobao', value:388},
+{ source: 'left_JD', target: 'right_Channel Partner', value:11280},
+{ source: 'left_JD', target: 'right_Douyin', value:2114},
+{ source: 'left_JD', target: 'right_P&C B2B', value:494},
+{ source: 'left_JD', target: 'right_Carrier', value:3309},
+{ source: 'left_JD', target: 'right_TMall', value:1932},
+{ source: 'left_JD', target: 'right_PDD', value:772},
+{ source: 'left_JD', target: 'right_Rest', value:1055},
+{ source: 'left_JD', target: 'right_Lost Users', value:284889},
+{ source: 'left_WeChat 3PTU', target: 'right_WeChat 3PTU', value:285646},
+{ source: 'left_WeChat 3PTU', target: 'right_JD', value:10326},
+{ source: 'left_WeChat 3PTU', target: 'right_TMall-Tianji', value:3391},
+{ source: 'left_WeChat 3PTU', target: 'right_Alipay&Taobao', value:230},
+{ source: 'left_WeChat 3PTU', target: 'right_Channel Partner', value:1475},
+{ source: 'left_WeChat 3PTU', target: 'right_Douyin', value:1867},
+{ source: 'left_WeChat 3PTU', target: 'right_P&C B2B', value:617},
+{ source: 'left_WeChat 3PTU', target: 'right_Carrier', value:600},
+{ source: 'left_WeChat 3PTU', target: 'right_TMall', value:1455},
+{ source: 'left_WeChat 3PTU', target: 'right_PDD', value:172},
+{ source: 'left_WeChat 3PTU', target: 'right_Rest', value:1391},
+{ source: 'left_WeChat 3PTU', target: 'right_Lost Users', value:474292},
+{ source: 'left_TMall-Tianji', target: 'right_TMall-Tianji', value:71501},
+{ source: 'left_TMall-Tianji', target: 'right_JD', value:23170},
+{ source: 'left_TMall-Tianji', target: 'right_WeChat 3PTU', value:7251},
+{ source: 'left_TMall-Tianji', target: 'right_Alipay&Taobao', value:643},
+{ source: 'left_TMall-Tianji', target: 'right_Channel Partner', value:6246},
+{ source: 'left_TMall-Tianji', target: 'right_Douyin', value:2094},
+{ source: 'left_TMall-Tianji', target: 'right_P&C B2B', value:384},
+{ source: 'left_TMall-Tianji', target: 'right_Carrier', value:1984},
+{ source: 'left_TMall-Tianji', target: 'right_TMall', value:3165},
+{ source: 'left_TMall-Tianji', target: 'right_PDD', value:535},
+{ source: 'left_TMall-Tianji', target: 'right_Rest', value:772},
+{ source: 'left_TMall-Tianji', target: 'right_Lost Users', value:127471},
+{ source: 'left_Alipay&Taobao', target: 'right_Alipay&Taobao', value:6605},
+{ source: 'left_Alipay&Taobao', target: 'right_JD', value:14647},
+{ source: 'left_Alipay&Taobao', target: 'right_WeChat 3PTU', value:20009},
+{ source: 'left_Alipay&Taobao', target: 'right_TMall-Tianji', value:4651},
+{ source: 'left_Alipay&Taobao', target: 'right_Channel Partner', value:902},
+{ source: 'left_Alipay&Taobao', target: 'right_Douyin', value:1009},
+{ source: 'left_Alipay&Taobao', target: 'right_P&C B2B', value:248},
+{ source: 'left_Alipay&Taobao', target: 'right_Carrier', value:265},
+{ source: 'left_Alipay&Taobao', target: 'right_TMall', value:1832},
+{ source: 'left_Alipay&Taobao', target: 'right_PDD', value:126},
+{ source: 'left_Alipay&Taobao', target: 'right_Rest', value:375},
+{ source: 'left_Alipay&Taobao', target: 'right_Lost Users', value:97418},
+{ source: 'left_Channel Partner', target: 'right_Channel Partner', value:60927},
+{ source: 'left_Channel Partner', target: 'right_JD', value:24082},
+{ source: 'left_Channel Partner', target: 'right_WeChat 3PTU', value:9814},
+{ source: 'left_Channel Partner', target: 'right_TMall-Tianji', value:5913},
+{ source: 'left_Channel Partner', target: 'right_Alipay&Taobao', value:332},
+{ source: 'left_Channel Partner', target: 'right_Douyin', value:2020},
+{ source: 'left_Channel Partner', target: 'right_P&C B2B', value:490},
+{ source: 'left_Channel Partner', target: 'right_Carrier', value:3089},
+{ source: 'left_Channel Partner', target: 'right_TMall', value:1550},
+{ source: 'left_Channel Partner', target: 'right_PDD', value:862},
+{ source: 'left_Channel Partner', target: 'right_Rest', value:1025},
+{ source: 'left_Channel Partner', target: 'right_Lost Users', value:194478},
+{ source: 'left_Douyin', target: 'right_Douyin', value:28492},
+{ source: 'left_Douyin', target: 'right_JD', value:12369},
+{ source: 'left_Douyin', target: 'right_WeChat 3PTU', value:3623},
+{ source: 'left_Douyin', target: 'right_TMall-Tianji', value:3459},
+{ source: 'left_Douyin', target: 'right_Alipay&Taobao', value:178},
+{ source: 'left_Douyin', target: 'right_Channel Partner', value:2063},
+{ source: 'left_Douyin', target: 'right_P&C B2B', value:254},
+{ source: 'left_Douyin', target: 'right_Carrier', value:810},
+{ source: 'left_Douyin', target: 'right_TMall', value:660},
+{ source: 'left_Douyin', target: 'right_PDD', value:215},
+{ source: 'left_Douyin', target: 'right_Rest', value:320},
+{ source: 'left_Douyin', target: 'right_Lost Users', value:60155},
+{ source: 'left_P&C B2B', target: 'right_P&C B2B', value:6557},
+{ source: 'left_P&C B2B', target: 'right_JD', value:13046},
+{ source: 'left_P&C B2B', target: 'right_WeChat 3PTU', value:1426},
+{ source: 'left_P&C B2B', target: 'right_TMall-Tianji', value:1830},
+{ source: 'left_P&C B2B', target: 'right_Alipay&Taobao', value:47},
+{ source: 'left_P&C B2B', target: 'right_Channel Partner', value:965},
+{ source: 'left_P&C B2B', target: 'right_Douyin', value:392},
+{ source: 'left_P&C B2B', target: 'right_Carrier', value:378},
+{ source: 'left_P&C B2B', target: 'right_TMall', value:192},
+{ source: 'left_P&C B2B', target: 'right_PDD', value:91},
+{ source: 'left_P&C B2B', target: 'right_Rest', value:90},
+{ source: 'left_P&C B2B', target: 'right_Lost Users', value:36227},
+{ source: 'left_Carrier', target: 'right_Carrier', value:47358},
+{ source: 'left_Carrier', target: 'right_JD', value:15851},
+{ source: 'left_Carrier', target: 'right_WeChat 3PTU', value:3551},
+{ source: 'left_Carrier', target: 'right_TMall-Tianji', value:3095},
+{ source: 'left_Carrier', target: 'right_Alipay&Taobao', value:102},
+{ source: 'left_Carrier', target: 'right_Channel Partner', value:3998},
+{ source: 'left_Carrier', target: 'right_Douyin', value:503},
+{ source: 'left_Carrier', target: 'right_P&C B2B', value:114},
+{ source: 'left_Carrier', target: 'right_TMall', value:1594},
+{ source: 'left_Carrier', target: 'right_PDD', value:844},
+{ source: 'left_Carrier', target: 'right_Rest', value:741},
+{ source: 'left_Carrier', target: 'right_Lost Users', value:150447},
+{ source: 'left_TMall', target: 'right_TMall', value:32104},
+{ source: 'left_TMall', target: 'right_JD', value:13000},
+{ source: 'left_TMall', target: 'right_WeChat 3PTU', value:3321},
+{ source: 'left_TMall', target: 'right_TMall-Tianji', value:7162},
+{ source: 'left_TMall', target: 'right_Alipay&Taobao', value:406},
+{ source: 'left_TMall', target: 'right_Channel Partner', value:1843},
+{ source: 'left_TMall', target: 'right_Douyin', value:698},
+{ source: 'left_TMall', target: 'right_P&C B2B', value:172},
+{ source: 'left_TMall', target: 'right_Carrier', value:602},
+{ source: 'left_TMall', target: 'right_PDD', value:140},
+{ source: 'left_TMall', target: 'right_Rest', value:304},
+{ source: 'left_TMall', target: 'right_Lost Users', value:68825},
+{ source: 'left_PDD', target: 'right_PDD', value:10522},
+{ source: 'left_PDD', target: 'right_JD', value:14897},
+{ source: 'left_PDD', target: 'right_WeChat 3PTU', value:1439},
+{ source: 'left_PDD', target: 'right_TMall-Tianji', value:2187},
+{ source: 'left_PDD', target: 'right_Alipay&Taobao', value:158},
+{ source: 'left_PDD', target: 'right_Channel Partner', value:1483},
+{ source: 'left_PDD', target: 'right_Douyin', value:391},
+{ source: 'left_PDD', target: 'right_P&C B2B', value:89},
+{ source: 'left_PDD', target: 'right_Carrier', value:564},
+{ source: 'left_PDD', target: 'right_TMall', value:236},
+{ source: 'left_PDD', target: 'right_Rest', value:176},
+{ source: 'left_PDD', target: 'right_Lost Users', value:33097},
+{ source: 'left_Rest', target: 'right_Rest', value:19635},
+{ source: 'left_Rest', target: 'right_JD', value:7969},
+{ source: 'left_Rest', target: 'right_WeChat 3PTU', value:3390},
+{ source: 'left_Rest', target: 'right_TMall-Tianji', value:979},
+{ source: 'left_Rest', target: 'right_Alipay&Taobao', value:94},
+{ source: 'left_Rest', target: 'right_Channel Partner', value:936},
+{ source: 'left_Rest', target: 'right_Douyin', value:154},
+{ source: 'left_Rest', target: 'right_P&C B2B', value:45},
+{ source: 'left_Rest', target: 'right_Carrier', value:553},
+{ source: 'left_Rest', target: 'right_TMall', value:144},
+{ source: 'left_Rest', target: 'right_PDD', value:82},
+{ source: 'left_Rest', target: 'right_Lost Users', value:56534},
   ];
 
   // 从 links 动态提取左侧和右侧渠道列表
@@ -352,11 +430,35 @@
 
   // 计算渠道流失率
   function getLossRate(channel) {
-    const sourceLinks = links.filter(l => l.source === `left_${channel}` && l.target === 'right_流失');
+    const sourceLinks = links.filter(l => l.source === `left_${channel}` && l.target === 'right_Lost Users');
     const lossVal = sourceLinks.length > 0 ? sourceLinks[0].value : 0;
     const totalLinks = links.filter(l => l.source === `left_${channel}`);
     const totalVal = totalLinks.reduce((sum, l) => sum + l.value, 0);
     return totalVal > 0 ? lossVal / totalVal : 0;
+  }
+
+  // 计算渠道转移率（转移到除Lost Users和自己的其他渠道的比例）
+  function getTransferRate(channel) {
+    const sourceLinks = links.filter(l => l.source === `left_${channel}`);
+    const totalVal = sourceLinks.reduce((sum, l) => sum + l.value, 0);
+
+    // 排除流向Lost Users和流向自己的链接
+    const transferLinks = sourceLinks.filter(l => l.target !== 'right_Lost Users' && l.target !== `right_${channel}`);
+    const transferVal = transferLinks.reduce((sum, l) => sum + l.value, 0);
+
+    return totalVal > 0 ? transferVal / totalVal : 0;
+  }
+
+  // 计算渠道留存率（自己流向自己的用户占比）
+  function getRetentionRate(channel) {
+    const sourceLinks = links.filter(l => l.source === `left_${channel}`);
+    const totalVal = sourceLinks.reduce((sum, l) => sum + l.value, 0);
+
+    // 只计算流向自己的链接
+    const retainLinks = sourceLinks.filter(l => l.target === `right_${channel}`);
+    const retainVal = retainLinks.reduce((sum, l) => sum + l.value, 0);
+
+    return totalVal > 0 ? retainVal / totalVal : 0;
   }
 
   // 获取渠道总用户数（流出量）
@@ -365,60 +467,51 @@
     return sourceLinks.reduce((sum, l) => sum + l.value, 0);
   }
 
-  // 获取排序后的左侧渠道：按流失率升序，流失率相同时按用户数降序
+  // 获取排序后的左侧渠道：按留存率降序，留存率相同时按用户数降序
   function getSortedLeftChannels() {
     const channelStats = [];
     leftChannels.forEach(ch => {
-      const lossLinks = links.filter(l => l.source === `left_${ch}` && l.target === 'right_流失');
-      const lossVal = lossLinks.length > 0 ? lossLinks[0].value : 0;
       const totalLinks = links.filter(l => l.source === `left_${ch}`);
       const totalVal = totalLinks.reduce((sum, l) => sum + l.value, 0);
+      const retainLinks = totalLinks.filter(l => l.target === `right_${ch}`);
+      const retainVal = retainLinks.reduce((sum, l) => sum + l.value, 0);
       channelStats.push({
         name: ch,
-        lossVal: lossVal,
+        retainVal: retainVal,
         totalVal: totalVal
       });
     });
     channelStats.sort((a, b) => {
-      const rateA = a.lossVal * b.totalVal;
-      const rateB = b.lossVal * a.totalVal;
+      const rateA = a.retainVal * b.totalVal;
+      const rateB = b.retainVal * a.totalVal;
       if (rateA !== rateB) {
-        return rateA - rateB;
+        return rateB - rateA;
       }
       return b.totalVal - a.totalVal;
     });
     return channelStats.map(c => c.name);
   }
 
-  // 获取排序后的右侧渠道：按用户增长率降序，流失在最下方
+  // 获取排序后的右侧渠道：按转入人数降序，Lost Users在最下方
   function getSortedRightChannels() {
     const channelStats = [];
     rightChannels.forEach(ch => {
-      if (ch !== '流失') {
-        // 计算流入量（右侧该渠道的总用户数）
-        const targetLinks = links.filter(l => l.target === `right_${ch}`);
-        const inflowVal = targetLinks.reduce((sum, l) => sum + l.value, 0);
-        // 计算流出量（左侧该渠道的原用户数）
-        const sourceLinks = links.filter(l => l.source === `left_${ch}`);
-        const outflowVal = sourceLinks.reduce((sum, l) => sum + l.value, 0);
-        // 计算增长率 = (流入 - 流出) / 流出，左侧没有则为 Infinity
-        const growthRate = outflowVal > 0 ? (inflowVal - outflowVal) / outflowVal : Infinity;
+      if (ch !== 'Lost Users') {
+        // 计算其他渠道转入人数（不包括新增渠道FY26 1H New，也不包括自己）
+        const targetLinks = links.filter(l => l.target === `right_${ch}` &&
+                                          l.source !== 'left_FY26_1H_New' &&
+                                          l.source !== `left_${ch}`);
+        const inflowFromOtherChannels = targetLinks.reduce((sum, l) => sum + l.value, 0);
+
         channelStats.push({
           name: ch,
-          inflowVal: inflowVal,
-          outflowVal: outflowVal,
-          growthRate: growthRate
+          inflowFromOtherChannels: inflowFromOtherChannels
         });
       }
     });
-    // 按增长率降序排列，增长率相同（如都是Infinity）则按流入量降序
-    channelStats.sort((a, b) => {
-      if (b.growthRate !== a.growthRate) {
-        return b.growthRate - a.growthRate;
-      }
-      return b.inflowVal - a.inflowVal;
-    });
-    return [...channelStats.map(c => c.name), '流失'];
+    // 按转入人数降序排列
+    channelStats.sort((a, b) => b.inflowFromOtherChannels - a.inflowFromOtherChannels);
+    return [...channelStats.map(c => c.name), 'Lost Users'];
   }
 
   // 构建左侧节点数据（已排序）
@@ -427,19 +520,19 @@
       const channelId = `left_${ch}`;
       const showName = ch === 'FY26_1H_New' ? 'FY26 1H New' : ch;
 
-      // 计算流失率
-      const lossRate = getLossRate(ch);
-      const lossRatePercent = (lossRate * 100).toFixed(2);
+      // 计算留存率
+      const retentionRate = getRetentionRate(ch);
+      const retentionRatePercent = (retentionRate * 100).toFixed(0);
 
-      // 在渠道名称后添加流失率
-      const displayName = `${showName} (${lossRatePercent}%)`;
+      // 在渠道名称后添加留存率
+      const displayName = `${showName} \n留存率:${retentionRatePercent}%`;
 
       // 更新nodeNameMap
       nodeNameMap[channelId] = displayName;
 
       return {
         id: channelId,      // 唯一标识符
-        name: displayName,   // 显示名称（包含流失率）
+        name: displayName,   // 显示名称（包含留存率）
         label: {
           formatter: displayName,
           position: 'left',
@@ -458,16 +551,47 @@
     const rightNodes = getSortedRightChannels().map(ch => {
       const channelId = `right_${ch}`;
 
+      // 计算其他渠道流入人数（不包括新增渠道FY26 1H New，也不包括自己）
+      const targetLinks = links.filter(l => l.target === channelId &&
+                                        l.source !== 'left_FY26_1H_New' &&
+                                        l.source !== `left_${ch}`);
+      const inflowFromOtherChannels = targetLinks.reduce((sum, l) => sum + l.value, 0).toLocaleString('en-US');
+
       // 更新nodeNameMap
       nodeNameMap[channelId] = ch;
+
+      // Lost Users 不显示流入信息
+      if (ch === 'Lost Users') {
+        return {
+          id: channelId,      // 唯一标识符
+          name: ch,            // 显示名称
+          label: {
+            formatter: ch,
+            position: 'right',
+            color: CONFIG_FONT_COLOR
+          },
+          depth: 1,
+          itemStyle: { color: channelColorMap.get(ch) }
+        };
+      }
 
       return {
         id: channelId,      // 唯一标识符
         name: ch,            // 显示名称
         label: {
-          formatter: ch,
+          formatter: `{a|${ch}}\n{b|其他渠道转入:${inflowFromOtherChannels}人}`,
           position: 'right',
-          color: CONFIG_FONT_COLOR
+          color: CONFIG_FONT_COLOR,
+          rich: {
+            a: {
+              color: CONFIG_FONT_COLOR,
+              fontSize: isMobile ? mobileConfig.labelFontSize : 14
+            },
+            b: {
+              color: CONFIG_FONT_COLOR,
+              fontSize: isMobile ? mobileConfig.labelFontSize - 1 : 14
+            }
+          }
         },
         depth: 1,
         itemStyle: { color: channelColorMap.get(ch) }
@@ -571,7 +695,6 @@
 
         // 遍历所有连线，找出当前节点所有流入、流出数据
         const relatedLinks = [];
-        let lossCount = 0;
         links.forEach(link => {
           const sourceName = originalNodeNameMap[link.source];
           const targetName = originalNodeNameMap[link.target];
@@ -580,21 +703,18 @@
               sourceName,
               targetName,
               value: link.value,
-              isLoss: targetName === '流失',
+              isLoss: targetName === 'Lost Users',
               isFY26New: sourceName === 'FY26 1H New'
             });
-            if (targetName === '流失') {
-              lossCount += link.value;
-            }
           }
         });
 
-        // 排序：非FY26 1H New按数值降序，FY26 1H New放在最后（流失在FY26 1H New之前）
+        // 排序：非FY26 1H New按数值降序，FY26 1H New放在最后（Lost Users在FY26 1H New之前）
         relatedLinks.sort((a, b) => {
           // FY26 1H New 排在最后
           if (a.isFY26New && !b.isFY26New) return 1;
           if (!a.isFY26New && b.isFY26New) return -1;
-          // 流失排在最后（在 FY26 1H New 之前）
+          // Lost Users排在最后（在 FY26 1H New 之前）
           if (a.isLoss && !b.isLoss) return 1;
           if (!a.isLoss && b.isLoss) return -1;
           return b.value - a.value;
@@ -612,27 +732,23 @@
 
         tip += '</table>';
 
-        // 添加流失率（仅左侧渠道显示）
-        if (lossCount > 0 && params.value > 0 && nodeKey.startsWith('left_')) {
-          tip += `\n流失率：${((lossCount / params.value) * 100).toFixed(2)}%`;
+        // 添加留存率（仅左侧渠道显示）
+        if (params.value > 0 && nodeKey.startsWith('left_')) {
+          const ch = nodeKey.replace('left_', '');
+          const retentionRate = getRetentionRate(ch);
+          tip += `<div>留存率：${(retentionRate * 100).toFixed(0)}%</div>`;
         }
 
-        // 添加增长率（仅右侧渠道显示）
-        if (nodeKey.startsWith('right_') && nodeShowName !== '流失') {
-          const targetLinks = links.filter(l => l.target === nodeKey);
-          const inflowVal = targetLinks.reduce((sum, l) => sum + l.value, 0);
-          // 查找对应的左侧渠道
-          const leftNodeKey = nodeKey.replace('right_', 'left_');
-          const sourceLinks = links.filter(l => l.source === leftNodeKey);
-          const outflowVal = sourceLinks.reduce((sum, l) => sum + l.value, 0);
-          if (outflowVal > 0) {
-            const growthRate = ((inflowVal - outflowVal) / outflowVal) * 100;
-            const sign = growthRate >= 0 ? '+' : '';
-            tip += `\n增长率：${sign}${growthRate.toFixed(2)}%`;
-          } else {
-            // 左侧没有该渠道（纯新增渠道），增长率为无穷大
-            tip += `\n增长率：∞（新增）`;
-          }
+        // 添加转入信息（仅右侧渠道显示）
+        if (nodeKey.startsWith('right_') && nodeShowName !== 'Lost Users') {
+          const ch = nodeKey.replace('right_', '');
+          // 计算其他渠道转入人数（不包括新增渠道FY26 1H New，也不包括自己）
+          const targetLinks = links.filter(l => l.target === nodeKey &&
+                                            l.source !== 'left_FY26_1H_New' &&
+                                            l.source !== `left_${ch}`);
+          const inflowFromOtherChannels = targetLinks.reduce((sum, l) => sum + l.value, 0).toLocaleString('en-US');
+
+          tip += `\n其他渠道转入：${fmt(inflowFromOtherChannels)}人`;
         }
 
         return tip;
@@ -649,6 +765,8 @@
       layoutIterations: layoutConfig.layoutIterations,
       nodeAlign: layoutConfig.nodeAlign,
       nodeWidth: isMobile ? mobileConfig.nodeWidth : layoutConfig.nodeWidth,
+      nodeGap: isMobile ? mobileConfig.nodeGap : layoutConfig.nodeGap,
+      minNodeHeight: isMobile ? mobileConfig.minNodeHeight : layoutConfig.minNodeHeight,
       lineStyle: {
         color: layoutConfig.line_color,
         curveness: isMobile ? mobileConfig.curveness : layoutConfig.curveness,
@@ -660,7 +778,8 @@
         fontFamily: CONFIG_FONT_FAMILY,
         width: isMobile ? mobileConfig.labelWidth : layoutConfig.labelWidth,
         overflow: isMobile ? 'truncate' : null,
-        textOverflow: isMobile ? 'ellipsis' : null
+        textOverflow: isMobile ? 'ellipsis' : null,
+        distance: isMobile ? mobileConfig.labelDistance : layoutConfig.labelDistance
       },
       emphasis: {
         focus: 'none',
@@ -718,7 +837,7 @@
 
     if (!nodeName) return;
 
-    // 如果 nodeName 是显示名称（如"京东"），查找对应的内部名称
+    // 如果 nodeName 是显示名称（如"JD"），查找对应的内部名称
     // 优先根据前缀匹配：左侧标签匹配 left_xxx，右侧标签匹配 right_xxx
     if (!nodeNameMap[nodeName]) {
       let leftMatch = null;
