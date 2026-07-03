@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>FY24-25 用户流向汇总</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Helvetica, Arial, sans-serif;
+      background: #000000;
+      min-height: 100vh;
+    }
+
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.95);
+      padding: 15px 20px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .header h1 {
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: normal;
+    }
+
+    .toolbar {
+      position: fixed;
+      right: 20px;
+      top: 20px;
+      z-index: 9999;
+    }
+
+    .btn {
+      padding: 5px 10px;
+      margin: 0 5px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s;
+    }
+
+    .btn-primary {
+      background: #5470c6;
+      color: #fff;
+    }
+
+    .btn-success {
+      background: #91cc75;
+      color: #fff;
+    }
+
+    .toolbar-select {
+      padding: 8px 12px;
+      margin: 0;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      background: #5470c6;
+      color: #fff;
+      cursor: pointer;
+      min-width: 200px;
+      max-width: 250px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .toolbar-select option {
+      background: #5470c6;
+      color: #fff;
+      padding: 8px 12px;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      padding-top: 5px;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .chart-section {
+      width: 95%;
+      min-height: 95vh;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      margin: 10px auto;
+    }
+
+    .chart-section iframe {
+      width: 100%;
+      height: 95vh;
+      border: none;
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 14px;
+      }
+
+      .header {
+        padding: 10px 15px;
+      }
+
+      .container {
+        padding-top: 10px;
+      }
+
+      .chart-section iframe {
+        height: 100vh;
+      }
+
+      .chart-section {
+        min-height: 100vh;
+
+      }
+
+      .toolbar {
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        width: 90%;
+        max-width: 300px;
+        margin: 0 auto;
+      }
+
+      .toolbar-select {
+        min-width: 100%;
+        max-width: 100%;
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="toolbar" id="toolbar">
+  <select class="toolbar-select" id="pageSelector" onchange="navigateToPage()">
+    <option value="" disabled selected>切换到</option>
+    <option value="channelUsers(FY24-25)_all.html">FY24 to FY25 用户流向</option>
+    <option value="channelUsers.html">FY25 2H to FY26 1H 用户流向（其他渠道：天猫官旗、官微、淘宝直充等）</option>
+  </select>
+</div>
+  <div class="container">
+    <div class="chart-section">
+      <iframe src="channelUsers(FY24-25)_remain.html?embedded=true&noAutoHighlight=true" scrolling="no"></iframe>
+    </div>
+    <div class="chart-section">
+      <iframe src="channelUsers(FY24-25)_special.html?embedded=true&noAutoHighlight=true" scrolling="no"></iframe>
+    </div>
+    <div class="chart-section">
+      <iframe src="channelUsers(FY24-25).html?embedded=true&noAutoHighlight=true" scrolling="no"></iframe>
+    </div>
+  </div>
+</body>
+<script>
+  function navigateToPage() {
+    const selector = document.getElementById('pageSelector');
+    const selectedPage = selector.value;
+    if (selectedPage) {
+      window.location.href = selectedPage + '?noAutoHighlight=true';
+    }
+  }
+
+  // 设置当前页面为选中状态
+  function setCurrentPageSelected() {
+    const currentPage = window.location.pathname.split('/').pop();
+    const selector = document.getElementById('pageSelector');
+    for (let i = 0; i < selector.options.length; i++) {
+      if (selector.options[i].value === currentPage) {
+        selector.selectedIndex = i;
+        break;
+      }
+    }
+  }
+
+  setCurrentPageSelected();
+
+</script>
+</html>
