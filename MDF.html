@@ -26,8 +26,9 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(50%, 1fr));
             gap: 10px;
-            max-width: 1200px;
-            margin: 10px auto;
+            max-width: 1500px;
+            margin: 15px auto 20px;
+            padding: 10px;
         }
         .chart-box {
             border-radius: 8px;
@@ -302,27 +303,14 @@
 
         lineChart.setOption({
             xAxis: { data: times },
-            series: series,
-            graphic: {
-                elements: [{
-                    type: 'text',
-                    left: isMobile() ? '4%' : '2%',
-                    top: isMobile() ? '12%' : '10%',
-                    style: {
-                        text: '销售占比'+yTitle,
-                        fill: '#ffffff',
-                        fontSize: isMobile() ? 10 : 14,
-                        fontFamily: 'Helvetica'
-                    }
-                }]
-            }
+            series: series
         });
 
         // 更新图表2
         const followerSeries = buildFollowerSeries();
         line2Chart.setOption({
             xAxis: { data: times },
-            series: followerSeries
+            series: followerSeries,
         });
 
         // 更新图表3
@@ -530,14 +518,6 @@
             },
             yAxis: {
                 type: 'value',
-                name: '增粉数量',
-                nameLocation: 'end',
-                nameTextStyle: {
-                    color: '#ffffff',
-                    fontSize: mobile ? 10 : 14,
-                    fontFamily: 'Helvetica',
-                    align: 'right'
-                },
                 axisLine: { lineStyle: { color: '#ffffff' } },
                 axisLabel: {
                     color: '#ffffff',
@@ -549,7 +529,20 @@
                 },
                 splitLine: { lineStyle: { color: '#333333' } }
             },
-            series: series
+            series: series,
+            graphic: {
+                elements: [{
+                    type: 'text',
+                    left: mobile ? '4%' : '2%',
+                    top: mobile ? '12%' : '10%',
+                    style: {
+                        text: '增粉数量',
+                        fill: '#ffffff',
+                        fontSize: mobile ? 10 : 14,
+                        fontFamily: 'Helvetica'
+                    }
+                }]
+            }
         };
 
         line2Chart.setOption(option);
@@ -624,14 +617,6 @@
             },
             yAxis: {
                 type: 'value',
-                name: 'ARPU',
-                nameLocation: 'end',
-                nameTextStyle: {
-                    color: '#ffffff',
-                    fontSize: mobile ? 10 : 14,
-                    fontFamily: 'Helvetica',
-                    align: 'right'
-                },
                 axisLine: { lineStyle: { color: '#ffffff' } },
                 axisLabel: {
                     color: '#ffffff',
@@ -643,7 +628,20 @@
                 },
                 splitLine: { lineStyle: { color: '#333333' } }
             },
-            series: series
+            series: series,
+            graphic: {
+                elements: [{
+                    type: 'text',
+                    left: mobile ? '4%' : '2%',
+                    top: mobile ? '12%' : '10%',
+                    style: {
+                        text: 'ARPU',
+                        fill: '#ffffff',
+                        fontSize: mobile ? 10 : 14,
+                        fontFamily: 'Helvetica'
+                    }
+                }]
+            }
         };
 
         line3Chart.setOption(option);
@@ -718,14 +716,6 @@
             },
             yAxis: {
                 type: 'value',
-                name: '咨询数量',
-                nameLocation: 'end',
-                nameTextStyle: {
-                    color: '#ffffff',
-                    fontSize: mobile ? 10 : 14,
-                    fontFamily: 'Helvetica',
-                    align: 'right'
-                },
                 axisLine: { lineStyle: { color: '#ffffff' } },
                 axisLabel: {
                     color: '#ffffff',
@@ -737,7 +727,20 @@
                 },
                 splitLine: { lineStyle: { color: '#333333' } }
             },
-            series: series
+            series: series,
+            graphic: {
+                elements: [{
+                    type: 'text',
+                    left: mobile ? '4%' : '2%',
+                    top: mobile ? '12%' : '10%',
+                    style: {
+                        text: '咨询数量',
+                        fill: '#ffffff',
+                        fontSize: mobile ? 10 : 14,
+                        fontFamily: 'Helvetica'
+                    }
+                }]
+            }
         };
 
         line4Chart.setOption(option);
