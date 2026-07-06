@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>CN Gift Card Expiry Fee Dashboard</title>
+    <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5/dist/echarts.min.js?v=2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: #000000;
+            width: 100%;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        .dashboard-header {
+            text-align: center;
+            padding: 15px 10px 5px;
+        }
+        .dashboard-title {
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .dashboard-subtitle {
+            color: #aaaaaa;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .main-container {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 0 10px;
+        }
+        .chart-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+        .pie-container {
+            flex: 1;
+            min-width: 280px;
+            max-width: calc(60% - 8px);
+        }
+
+        .pie-container1 {
+            flex: 1;
+            min-width: 200px;
+            max-width: calc(20% - 8px);
+        }
+        .cards-box {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            height: 310px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
+        }
+        .cards-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 100%;
+            border-radius: 6px;
+            margin: 2px 0;
+        }
+        .cards-label {
+            color: #ffffff;
+            font-size: 14px;
+            margin-bottom: 10px;
+            height: 30px;
+        }
+
+        .cards-value {
+            color: #ffffff;
+            font-size: 32px;
+            font-weight: bold;
+            font-family: 'Helvetica', Arial, sans-serif;
+        }
+
+        .line-charts-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 15px auto 20px;
+            box-sizing: border-box;
+        }
+        .line-charts-container .chart-box {
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .chart-box {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+        }
+        .pie-box {
+            border-radius: 8px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
+        }
+        .pie-chart {
+            width: 100%;
+            height: 280px;
+        }
+        .line-chart {
+            width: 100%;
+            height: 450px;
+        }
+        @media (max-width: 768px) {
+            .dashboard-title {
+                font-size: 16px;
+            }
+            .pie-chart {
+                height: 240px;
+            }
+            .line-chart {
+                height: 240px;
+            }
+            .pie-container {
+                min-width: 100%;
+                max-width: 100%;
+            }
+            .pie-container1 {
+                min-width: 100%;
+                max-width: 100%;
+            }
+            .cards-box {
+                height: 150px;
+                gap: 5px;
+                padding: 10px 0;
+            }
+            .cards-value {
+                font-size: 20px;
+            }
+
+            .line-charts-container {
+                margin-top: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-header">
+        <h1 class="dashboard-title">CN Gift Card Expiry Fee Dashboard</h1>
+        <p class="dashboard-subtitle" id="updateTime">Loading...</p>
+    </div>
+
+    <div class="main-container">
+        <div class="chart-container">
+            <div class="pie-container1">
+                <div class="cards-box" id="cardsBox">
+                    <div class="cards-content">
+                        <div class="cards-label">Expiry fee balance can be spent on promotion</div>
+                        <div class="cards-value" id="cardsValue">--</div>
+                    </div>
+                </div>
+            </div>
+            <div class="pie-container1">
+                <div class="cards-box" id="cardsBox1">
+                    <div class="cards-content">
+                        <div class="cards-label">Monthly Expiry Fee <span id="newMonthly">(New from June)</span></div>
+                        <div class="cards-value" id="cardsValue1">--</div>
+                    </div>
+                </div>
+            </div>
+            <div class="pie-container">
+                <div class="pie-box">
+                    <div id="pieLC" class="pie-chart"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="line-charts-container">
+            <div class="chart-box">
+                <div id="lineChart1" class="line-chart"></div>
+            </div>
+            <div class="chart-box">
+                <div id="lineChart2" class="line-chart"></div>
+            </div>
+            <div class="chart-box">
+                <div id="lineChart3" class="line-chart"></div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    const pieLC = echarts.init(document.getElementById('pieLC'));
+    //const pieUSD = echarts.init(document.getElementById('pieUSD'));
+    const lineChart1 = echarts.init(document.getElementById('lineChart1'));
+    const lineChart2 = echarts.init(document.getElementById('lineChart2'));
+    const lineChart3 = echarts.init(document.getElementById('lineChart3'));
+
+    const DATA_FILE = 'expiry_fee_data.json?v=' + new Date().getTime();
+
+    // 默认数据
+    let amountInLC = {};
+    let amountInUSD = {};
+    let lineData1 = { title: '', data: [] };
+    let lineData2 = { title: '', data: [] };
+    let lineData3 = { title: '', data: [] };
+    let totalExpiryCards = 0;
+    let updateTime = '';
+    let newMonthly = '';
+
+    // 颜色配置
+    const pieColors = ['#37A2DA', '#868E96', '#2E7D32', '#9FE6B8', '#73c0de'];
+    const lineColors = ['#91cc75', '#37a2da', '#ff6492', '#ff9f7f', '#7c4dff'];
+
+    // 环形图数据项
+    const pieItems = [
+        { key: 'Total overdue redeem amount', label: 'Total overdue redeem amount' },
+        { key: 'Amount spent on promotion', label: 'Amount spent on promotion' },
+        { key: 'Reserve for future overdue redemption', label: 'Reserve for future overdue' },
+        { key: 'Expiry fee balance can be spent on promotion', label: 'Expiry fee balance can be spent on promotion' }
+    ];
+
+    async function loadDataFile() {
+        try {
+            console.log('Loading data from:', DATA_FILE);
+            const response = await fetch(DATA_FILE);
+            console.log('Response status:', response.status);
+            if (!response.ok) {
+                console.warn(`未找到 ${DATA_FILE}，使用默认数据`);
+                return false;
+            }
+            const data = await response.json();
+            console.log('Loaded data:', data);
+
+            // 加载环形图数据
+            if (data.amountInLC) {
+                amountInLC = data.amountInLC;
+                console.log('amountInLC loaded:', amountInLC);
+            }
+
+            if (data.amountInUSD) {
+                amountInUSD = data.amountInUSD;
+                console.log('amountInUSD loaded:', amountInUSD);
+            }
+
+            // 加载折线图数据
+            if (data.lineData1) {
+                lineData1 = data.lineData1;
+                console.log('lineData1 loaded:', lineData1);
+            }
+            if (data.lineData2) {
+                lineData2 = data.lineData2;
+            }
+            if (data.lineData3) {
+                lineData3 = data.lineData3;
+            }
+
+            // 更新时间
+            if (data.updateTime) {
+                updateTime = data.updateTime;
+            }
+            // 新月度数据
+            if (data.newMonthly) {
+                newMonthly = data.newMonthly;
+                console.log('newMonthly loaded:', newMonthly);
+            }
+
+            // 加载卡片数据
+            if (data.totalExpiryCards) {
+                totalExpiryCards = data.totalExpiryCards;
+            }
+
+            return true;
+        } catch (error) {
+            console.error('加载数据失败:', error);
+            return false;
+        }
+    }
+
+    function formatCurrency(value, isUSD = false, asMillion = false) {
+        if (asMillion) {
+            const m = value / 1000000;
+            return (isUSD ? '$' : '¥') + m.toFixed(2) + 'M';
+        }
+        if (isUSD) {
+            return '$' + value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+        return '¥' + value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function getPieOption(title, data, isUSD = false) {
+        const mobile = isMobile();
+
+        // 计算总计
+        let total = 0;
+        pieItems.forEach(item => {
+            total += data[item.key] || 0;
+        });
+
+        return {
+            backgroundColor: 'transparent',
+            title: {
+                text: title,
+                left: 'center',
+                top: 10,
+                textStyle: {
+                    color: '#ffffff',
+                    fontSize: mobile ? 14 : 16,
+                    fontWeight: '600'
+                }
+            },
+            tooltip: {
+                trigger: 'item',
+                confine:true,
+                backgroundColor: 'rgba(50,50,50,0.95)',
+                borderColor: '#777',
+                borderWidth: 1,
+                textStyle: { color: '#fff' },
+                formatter: function(params) {
+                    return `${params.name}<br/>
+                            ${formatCurrency(params.value, isUSD)}`;
+                }
+            },
+            /*legend: {
+                orient: mobile ? 'vertical' : 'horizontal',
+                bottom: mobile ? 5 : 10,
+                left: 'center',
+                textStyle: {
+                    color: '#cccccc',
+                    fontSize: mobile ? 10 : 14
+                },
+                itemWidth: 12,
+                itemHeight: 8,
+                type: 'scroll'
+            },*/
+            series: [{
+                name: title,
+                type: 'pie',
+                radius: ['45%', '65%'],
+                center: ['50%', '60%'],
+                avoidLabelOverlap: true,
+                itemStyle: {
+                    borderColor: '#111111',
+                    borderWidth: 2
+                },
+                label: {
+                    show: mobile ? true : true,
+                    position: 'outside',
+                    formatter: function(params) {
+                        return params.name+'\n' + formatCurrency(params.value, isUSD, true);
+                    },
+                    color: '#ffffff',
+                    fontSize: mobile ? 10 : 14,
+                    overflow: 'breakAll',
+                    lineHeight: mobile ? 10 : 15
+
+                },
+                data: pieItems.map((item, index) => ({
+                    value: data[item.key] || 0,
+                    name: item.label,
+                    itemStyle: { color: pieColors[index % pieColors.length] }
+                }))
+            }],
+            graphic: {
+                elements: [{
+                    type: 'text',
+                    left: 'center',
+                    top: '54%',
+                    style: {
+                        text: formatCurrency(total, isUSD, true),
+                        textAlign: 'center',
+                        fill: '#ffffff',
+                        fontSize: mobile ? 14 : 18,
+                        fontWeight: 'bold',
+                        fontFamily: 'Helvetica'
+                    }
+                }, {
+                    type: 'text',
+                    left: 'center',
+                    top: '63%',
+                    style: {
+                        text: 'Total expiry fee',
+                        textAlign: 'center',
+                        fill: '#ffffff',
+                        fontSize: mobile ? 12 : 14,
+                        fontFamily: 'Helvetica'
+                    }
+                }]
+            }
+        };
+    }
+
+    function getLineOption(title, lineData) {
+        const mobile = isMobile();
+
+        // Extract data from objects, with fallback
+        const data = lineData.data || [];
+        const times = data.map(item => item.date);
+        const amountData = data.map(item => item.Amount);
+        const unitData = data.map(item => item.Unit);
+
+        console.log('getLineOption - title:', title, 'data length:', data.length);
+
+        // Left Y-axis series (Amount) - color: #07C160
+        const leftSeries = {
+            name: 'Amount',
+            type: 'line',
+            yAxisIndex: 0,
+            symbol: 'circle',
+            symbolSize: 6,
+            smooth: false,
+            itemStyle: {
+                color: '#FF891A'
+            },
+            lineStyle: {
+                width: 2
+            },
+            data: amountData
+        };
+
+        // Right Y-axis series (Unit) - color: #FF891A
+        const rightSeries = {
+            name: 'Unit',
+            type: 'line',
+            yAxisIndex: 1,
+            symbol: 'circle',
+            symbolSize: 6,
+            smooth: false,
+            itemStyle: {
+                color: '#07C160'
+            },
+            lineStyle: {
+                width: 2
+            },
+            data: unitData
+        };
+
+        return {
+            backgroundColor: '#111111',
+            textStyle: {
+                color: '#ffffff',
+                fontFamily: 'Helvetica',
+                fontSize: mobile ? 12 : 14
+            },
+            title: {
+                text: title,
+                left: 'center',
+                top: mobile ? 5 : 15,
+                textStyle: {
+                    color: '#ffffff',
+                    fontSize: mobile ? 14 : 16,
+                    fontWeight: '600'
+                }
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    label: {
+                        backgroundColor: '#6a7985'
+                    }
+                },
+                confine: true,
+                backgroundColor: 'rgba(50,50,50,0.95)',
+                borderColor: '#777',
+                borderWidth: 1,
+                textStyle: { color: '#fff' },
+                formatter: function(params) {
+                let result = `<b>${params[0].axisValue}</b><br/>`;
+                    params.forEach(item => {
+                        if (item.value > 0) {
+                            const value = item.seriesName==='Amount'? formatCurrency(item.value,false,false) : item.value.toLocaleString('en-US');
+                            result += `${item.marker} ${item.seriesName}: ${value}<br/>`;
+                        }
+                    });
+                    return result;
+                }
+            },
+            legend: {
+                orient: mobile ? 'horizontal' : 'horizontal',
+                left: 'center',
+                bottom: mobile ? -5 : -5,
+                textStyle: {
+                    color: '#cccccc',
+                    fontSize: mobile ? 10 : 14
+                },
+                type: 'scroll'
+            },
+            grid: {
+                left: mobile ? '5%' : '3%',
+                right: mobile ? '5%' : '3%',
+                top: mobile ? '20%' : '20%',
+                bottom: mobile ? '5%' : '5%',
+                containLabel: true
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: times,
+                axisLine: { lineStyle: { color: '#ffffff' } },
+                axisLabel: {
+                    color: '#cccccc',
+                    fontFamily: 'Helvetica',
+                    fontSize: mobile ? 10 : 14,
+                    rotate: mobile ? 30 : 0
+                },
+                splitLine: { show: false }
+            },
+            yAxis: [
+                {
+                    type: 'value',
+                    name: 'Amount',
+                    nameLocation: 'end',
+                    nameGap: mobile ? 10 : 15,
+                    //splitNumber: 4,
+                    nameTextStyle: {
+                        fontSize: mobile ? 10 : 14,
+                        fontFamily: 'Helvetica',
+                        align: 'right',
+                        padding: [0, 0, 0, 0],
+                        color: '#FF891A'
+                    },
+                    axisLine: { lineStyle: { color: '#FF891A' }, show: true },
+                    axisLabel: {
+                        fontFamily: 'Helvetica',
+                        fontSize: mobile ? 10 : 14,
+                        formatter: function(value) {
+                            return formatCurrency(value, false, true);
+                        }
+                    },
+                    splitLine: { lineStyle: { color: '#333333' } }
+                },
+                {
+                    type: 'value',
+                    name: 'Unit',
+                    nameLocation: 'end',
+                    nameGap: mobile ? 10 : 15,
+                    //splitNumber: 4,
+                    nameTextStyle: {
+                        fontSize: mobile ? 10 : 14,
+                        fontFamily: 'Helvetica',
+                        align: 'left',
+                        padding: [0, 0, 0, 0],
+                        color: '#07C160'
+                    },
+                    axisLine: { lineStyle: { color: '#07C160' }, show: true },
+                    axisLabel: {
+                        fontFamily: 'Helvetica',
+                        fontSize: mobile ? 10 : 14
+                    },
+                    splitLine: { show: false }
+                }
+            ],
+            series: [leftSeries, rightSeries]
+        };
+    }
+
+    function isMobile() {
+        return window.innerWidth <= 768;
+    }
+
+    function updateCharts() {
+
+        // 更新 cardsBox3 数据（来自 amountInLC）
+        const overdueRedeem = amountInLC["Total overdue redeem amount"] || 0;
+        const promotionAmount = amountInLC["Amount spent on promotion"] || 0;
+        const reserveFuture = amountInLC["Reserve for future overdue redemption"] || 0;
+        const expiryBalance = amountInLC["Expiry fee balance can be spent on promotion"] || 0;
+        const balance = reserveFuture + expiryBalance;
+        const totalExpiryFee = overdueRedeem + promotionAmount + balance;
+
+        // 更新卡片数值
+        document.getElementById('cardsValue').textContent = "￥"+expiryBalance.toLocaleString('en-US');
+
+        document.getElementById('newMonthly').textContent = "(New from "+newMonthly+")";
+         // 更新 cardsValue1 - 取自 lineData2 最后一组数据的 Amount
+        if (lineData2.data && lineData2.data.length > 0) {
+            const lastData = lineData2.data[lineData2.data.length - 1];
+            document.getElementById('cardsValue1').textContent = "￥"+lastData.Amount.toLocaleString('en-US');
+        }
+
+        // 更新环形图
+        pieLC.setOption(getPieOption('Amount in LC', amountInLC, false));
+        //pieUSD.setOption(getPieOption('Amount in USD (Exchange rate $1 = ￥6.77)', amountInUSD, true));
+
+        // 更新折线图
+        lineChart1.setOption(getLineOption(lineData1.title || 'Expiry Fee Trend - Used', lineData1));
+        lineChart2.setOption(getLineOption(lineData2.title || 'Expiry Fee Trend - Expired', lineData2));
+        lineChart3.setOption(getLineOption(lineData3.title || 'Expiry Fee Trend - Total', lineData3));
+
+        // 更新时间
+        if (updateTime) {
+            document.getElementById('updateTime').textContent = 'Last updated: ' + updateTime;
+        }
+    }
+
+    // 监听窗口大小变化
+    window.addEventListener('resize', () => {
+        pieLC.resize();
+        //pieUSD.resize();
+        lineChart1.resize();
+        lineChart2.resize();
+        lineChart3.resize();
+        syncLineChartWidth();
+    });
+
+    // 同步折线图宽度与三个环形图总宽度相同
+    function syncLineChartWidth() {
+        if (isMobile()) return;
+        const chartContainer = document.querySelector('.chart-container');
+        const lineChartsContainer = document.querySelector('.line-charts-container');
+        if (chartContainer && lineChartsContainer) {
+            const containerWidth = chartContainer.offsetWidth;
+            lineChartsContainer.style.width = containerWidth + 'px';
+            lineChartsContainer.style.margin = '15px auto 20px';
+        }
+    }
+
+    // 初始化图表
+    function initCharts() {
+        updateCharts();
+        syncLineChartWidth();
+    }
+
+    // 先加载JSON数据，然后初始化图表
+    loadDataFile().then((success) => {
+        console.log('Data load success:', success);
+        console.log('amountInLC after load:', amountInLC);
+        console.log('lineData1 after load:', lineData1);
+        initCharts();
+    }).catch(err => {
+        console.error('Load data error:', err);
+        initCharts();
+    });
+</script>
+</body>
+</html>
