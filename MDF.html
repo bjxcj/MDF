@@ -37,11 +37,12 @@
             background: rgba(255, 255, 255, 0.07);
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
+            margin: 2px;
         }
         .chart {
             width: 100%;
             min-height: 350px;
-            height: 45vh;
+            height: 50vh;
         }
     </style>
 </head>
@@ -103,7 +104,7 @@
     // 默认数据 - 图表1
     let times = [];
     let seriesData = {};
-    let MDFsales = 100;
+    let MDFsales = 0;
 
     // 默认数据 - 图表2 (增粉数据)
     let followerSeriesData = {};
@@ -286,9 +287,9 @@
                         align: align,
                         formatter: 'Cumulative MDF\n￥'+MDFsales,
                         fontSize: mobile? 12:14,
-                        color:activityColor,
+                        color:'#ffffff',
                         backgroundColor: 'rgba(50,50,50,0.9)',
-                        borderColor: '#777',
+                        borderColor: activityColor,
                         borderWidth: 1,
                         borderRadius: 2,
                         padding: [2,5],
@@ -368,11 +369,9 @@
                 textStyle: { color: '#fff' },
                 formatter: function(params) {
                     let result = `<b>${params[0].axisValue}</b><br/>`;
-                    let total = 0;
                     params.forEach(item => {
                         if (item.value > 0) {
                             result += `${item.marker} ${item.seriesName}: ${item.value}%<br/>`;
-                            total += item.value;
                         }
                     });
                     return result;
@@ -388,7 +387,7 @@
                 itemHeight: mobile ? 10 : 14,
                 textStyle: {
                     color: '#ccc',
-                    fontSize: mobile ? 9 : 14
+                    fontSize: mobile ? 10 : 14
                 }
             },
             grid: {
@@ -421,7 +420,7 @@
                     fontFamily: 'Helvetica',
                     align: 'right'
                 },
-                axisLine: { lineStyle: { color: '#ffffff' } },
+                axisLine: { show:true,lineStyle: { color: '#ffffff' } },
                 axisLabel: {
                     color: '#ffffff',
                     fontFamily: 'Helvetica',
@@ -480,12 +479,12 @@
                 formatter: function(params) {
                     let result = `<b>${params[0].axisValue}</b><br/>`;
                     params.forEach(item => {
-                        result += `${item.marker} ${item.seriesName}: ${item.value}人<br/>`;
+                        result += `${item.marker} ${item.seriesName}: ${item.value.toLocaleString('en-US')}人<br/>`;
                     });
                     return result;
                 }
             },
-                       legend: {
+            legend: {
                 orient: mobile ? 'horizontal':'horizontal',
                 left: 'center',
                 bottom: mobile ? '3%' : '4%',
@@ -495,7 +494,7 @@
                 itemHeight: mobile ? 10 : 14,
                 textStyle: {
                     color: '#ccc',
-                    fontSize: mobile ? 9 : 14
+                    fontSize: mobile ? 10 : 14
                 }
             },
             grid: {
@@ -513,7 +512,7 @@
                 axisLabel: {
                     color: '#ffffff',
                     fontFamily: 'Helvetica',
-                    fontSize: mobile ? 10 : 12,
+                    fontSize: mobile ? 10 : 14,
                     rotate: mobile ? 45 : 0
                 },
                 splitLine: { show: false }
@@ -524,9 +523,9 @@
                 axisLabel: {
                     color: '#ffffff',
                     fontFamily: 'Helvetica',
-                    fontSize: mobile ? 10 : 12,
+                    fontSize: mobile ? 10 : 14,
                     formatter: function(value) {
-                        return value;
+                        return value.toLocaleString('en-US');
                     }
                 },
                 splitLine: { lineStyle: { color: '#333333' } }
@@ -579,7 +578,7 @@
                 formatter: function(params) {
                     let result = `<b>${params[0].axisValue}</b><br/>`;
                     params.forEach(item => {
-                        result += `${item.marker} ${item.seriesName}: ${item.value}<br/>`;
+                        result += `${item.marker} ${item.seriesName}: ${item.value.toLocaleString('en-US')}<br/>`;
                     });
                     return result;
                 }
@@ -594,7 +593,7 @@
                 itemHeight: mobile ? 10 : 14,
                 textStyle: {
                     color: '#ccc',
-                    fontSize: mobile ? 9 : 14
+                    fontSize: mobile ? 10 : 14
                 }
             },
             grid: {
@@ -612,7 +611,7 @@
                 axisLabel: {
                     color: '#ffffff',
                     fontFamily: 'Helvetica',
-                    fontSize: mobile ? 10 : 12,
+                    fontSize: mobile ? 10 : 14,
                     rotate: mobile ? 45 : 0
                 },
                 splitLine: { show: false }
@@ -623,9 +622,9 @@
                 axisLabel: {
                     color: '#ffffff',
                     fontFamily: 'Helvetica',
-                    fontSize: mobile ? 10 : 12,
+                    fontSize: mobile ? 10 : 14,
                     formatter: function(value) {
-                        return value;
+                        return value.toLocaleString('en-US');
                     }
                 },
                 splitLine: { lineStyle: { color: '#333333' } }
@@ -678,7 +677,7 @@
                 formatter: function(params) {
                     let result = `<b>${params[0].axisValue}</b><br/>`;
                     params.forEach(item => {
-                        result += `${item.marker} ${item.seriesName}: ${item.value}<br/>`;
+                        result += `${item.marker} ${item.seriesName}: ${item.value.toLocaleString('en-US')}<br/>`;
                     });
                     return result;
                 }
@@ -693,7 +692,7 @@
                 itemHeight: mobile ? 10 : 14,
                 textStyle: {
                     color: '#ccc',
-                    fontSize: mobile ? 9 : 14
+                    fontSize: mobile ? 10 : 14
                 }
             },
             grid: {
@@ -711,7 +710,7 @@
                 axisLabel: {
                     color: '#ffffff',
                     fontFamily: 'Helvetica',
-                    fontSize: mobile ? 10 : 12,
+                    fontSize: mobile ? 10 : 14,
                     rotate: mobile ? 45 : 0
                 },
                 splitLine: { show: false }
@@ -722,9 +721,9 @@
                 axisLabel: {
                     color: '#ffffff',
                     fontFamily: 'Helvetica',
-                    fontSize: mobile ? 10 : 12,
+                    fontSize: mobile ? 10 : 14,
                     formatter: function(value) {
-                        return value;
+                        return value.toLocaleString('en-US');
                     }
                 },
                 splitLine: { lineStyle: { color: '#333333' } }
