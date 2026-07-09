@@ -1,20 +1,20 @@
 {
-  "updateTime": "2026-06-24 (UTC+8)",
-  "newMonthly": "June",
+  "updateTime": "2026-07-09 (UTC+8)",
+  "newMonthly": "July",
   "amountInLC": {
-    "Total overdue redeem amount": 1276879,
+    "Total overdue redeem amount": 1284813,
     "Amount spent on promotion": 27155149,
-    "Reserve for future overdue redemption": 3975340,
-    "Expiry fee balance can be spent on promotion": 8622916
+    "Reserve for future overdue redemption": 4047884,
+    "Expiry fee balance can be spent on promotion": 9275805
   },
   "amountInUSD": {
-    "Total overdue redeem amount": 188608,
-    "Amount spent on promotion": 4011100,
-    "Reserve for future overdue redemption": 587199,
-    "Expiry fee balance can be spent on promotion": 1273695
+    "Total overdue redeem amount": 189221,
+    "Amount spent on promotion": 3999286,
+    "Reserve for future overdue redemption": 596154,
+    "Expiry fee balance can be spent on promotion": 1366098
   },
   "lineData1": {
-    "title": "Accumulated Expiry Fee & Unit Trend by Month",
+    "title": "Accumulated Expiry Fee & Units Trend by Month",
     "data": [
       { "date": "02/01/20", "Amount": 12764, "Unit":3525},
       { "date": "03/01/20", "Amount": 35281, "Unit":6348},
@@ -92,11 +92,12 @@
       { "date": "03/01/26", "Amount": 38910334, "Unit":558229},
       { "date": "04/01/26", "Amount": 39622534, "Unit":581540},
       { "date": "05/01/26", "Amount": 40319606, "Unit":593334},
-      { "date": "06/01/26", "Amount": 41030283.85, "Unit":602023}
+      { "date": "06/01/26", "Amount": 41030283.85, "Unit":602023},
+      { "date": "07/01/26", "Amount": 41763651, "Unit":629257}
     ]
   },
   "lineData2": {
-    "title": "Expiry Fee & Unit Trend by Month",
+    "title": "Expiry Fee & Units Trend by Month",
     "data": [
       { "date": "02/01/20", "Amount": 12764, "Unit":3525},
       { "date": "03/01/20", "Amount": 22517, "Unit":6348},
@@ -174,7 +175,8 @@
       { "date": "03/01/26", "Amount": 667254, "Unit":197786},
       { "date": "04/01/26", "Amount": 712199, "Unit":213609},
       { "date": "05/01/26", "Amount": 697073, "Unit":215736},
-      { "date": "06/01/26", "Amount": 710678, "Unit":220585}
+      { "date": "06/01/26", "Amount": 710678, "Unit":220585},
+      { "date": "07/01/26", "Amount": 733367, "Unit":243310}
     ]
   },
   "lineData3": {
@@ -255,7 +257,8 @@
       { "date": "02/01/26", "Amount": 36289, "Unit":241},
       { "date": "03/01/26", "Amount": 74513, "Unit":430},
       { "date": "04/01/26", "Amount": 8458, "Unit":110},
-      { "date": "05/01/26", "Amount": 13898.96, "Unit":178}
+      { "date": "05/01/26", "Amount": 13898.96, "Unit":178},
+      { "date": "06/01/26", "Amount": 7934, "Unit":142}
     ]
   }
 }
