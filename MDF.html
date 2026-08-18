@@ -75,6 +75,8 @@
 
     // 当前活动名称（从data.json的seriesData最后一个key获取）
     let CURRENT_ACTIVITY = '';
+    let NO_CURRENT_ACTIVITY = '';
+    let NO_CURRENT_ACTIVITY1 = '';
 
     // 自定义颜色映射（从data.json加载）
     let colorMap = {};
@@ -133,7 +135,6 @@
                 // 当前活动名称取自seriesData最后一个数据
                 const seriesKeys = Object.keys(seriesData);
                 CURRENT_ACTIVITY = seriesKeys[seriesKeys.length - 1];
-                CURRENT_ACTIVITY1 = seriesKeys[seriesKeys.length - 2];
             }
 
             // 加载增粉数据
@@ -144,6 +145,9 @@
             // 加载ARPU数据
             if (data.arpuData) {
                 arpuSeriesData = data.arpuData;
+                const seriesKeys = Object.keys(arpuSeriesData);
+                NO_CURRENT_ACTIVITY = seriesKeys[0];
+                NO_CURRENT_ACTIVITY1 = seriesKeys[1];
             }
 
             // 加载CC数据
@@ -204,18 +208,7 @@
     // 构建series数据 - 图表3 (ARPU)
     function buildARPUSeries() {
         const result = Object.keys(arpuSeriesData).map(name => {
-            if (name === CURRENT_ACTIVITY || name === CURRENT_ACTIVITY1) {
-                const s = {
-                    name: name,
-                    type: 'line',
-                    symbolSize: 6,
-                    itemStyle: {
-                        color: getColor(name)
-                    },
-                    data: arpuSeriesData[name]
-                };
-                return s
-            }else{
+            if (name === NO_CURRENT_ACTIVITY || name === NO_CURRENT_ACTIVITY1) {
                 const s = {
                     name: name,
                     type: 'line',
@@ -224,6 +217,18 @@
                         type: 'dashed',
                         width: 1
                     },
+                    itemStyle: {
+                        color: getColor(name)
+                    },
+                    data: arpuSeriesData[name]
+                };
+
+                return s
+            }else{
+                const s = {
+                    name: name,
+                    type: 'line',
+                    symbolSize: 6,
                     itemStyle: {
                         color: getColor(name)
                     },
