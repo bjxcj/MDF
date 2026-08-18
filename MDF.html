@@ -133,6 +133,7 @@
                 // 当前活动名称取自seriesData最后一个数据
                 const seriesKeys = Object.keys(seriesData);
                 CURRENT_ACTIVITY = seriesKeys[seriesKeys.length - 1];
+                CURRENT_ACTIVITY1 = seriesKeys[seriesKeys.length - 2];
             }
 
             // 加载增粉数据
@@ -203,7 +204,7 @@
     // 构建series数据 - 图表3 (ARPU)
     function buildARPUSeries() {
         const result = Object.keys(arpuSeriesData).map(name => {
-            if (name === CURRENT_ACTIVITY) {
+            if (name === CURRENT_ACTIVITY || name === CURRENT_ACTIVITY1) {
                 const s = {
                     name: name,
                     type: 'line',
@@ -420,7 +421,7 @@
                     fontFamily: 'Helvetica',
                     align: 'right'
                 },
-                axisLine: {lineStyle: { color: '#ffffff' } },
+                axisLine: { lineStyle: { color: '#ffffff' } },
                 axisLabel: {
                     color: '#ffffff',
                     fontFamily: 'Helvetica',
