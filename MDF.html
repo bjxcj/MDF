@@ -105,6 +105,7 @@
 
     // 默认数据 - 图表1
     let times = [];
+    let times1 = [];
     let seriesData = {};
     let MDFsales = 0;
 
@@ -130,6 +131,7 @@
 
             if (data.times && data.seriesData) {
                 times = data.times;
+                times1 = data.times1;
                 seriesData = data.seriesData;
                 MDFsales = data.mdf;
                 // 当前活动名称取自seriesData最后一个数据
@@ -318,14 +320,14 @@
         // 更新图表2
         const followerSeries = buildFollowerSeries();
         line2Chart.setOption({
-            xAxis: { data: times },
+            xAxis: { data: times1 },
             series: followerSeries,
         });
 
         // 更新图表3
         const arpuSeries = buildARPUSeries();
         line3Chart.setOption({
-            xAxis: { data: times },
+            xAxis: { data: times1 },
             series: arpuSeries
         });
 
@@ -412,7 +414,8 @@
                     color: '#ffffff',
                     fontFamily: 'Helvetica',
                     fontSize: mobile ? 10 : 14,
-                    rotate: mobile ? 45 : 0
+                    rotate: mobile ? -45 :-30,
+                    margin: mobile ? 10 : 18
                 },
                 splitLine: { show: false }
             },
@@ -513,7 +516,7 @@
             xAxis: {
                 type: 'category',
                 boundaryGap: false,
-                data: times,
+                data: times1,
                 axisLine: { lineStyle: { color: '#ffffff' } },
                 axisLabel: {
                     color: '#ffffff',
@@ -612,7 +615,7 @@
             xAxis: {
                 type: 'category',
                 boundaryGap: false,
-                data: times,
+                data: times1,
                 axisLine: { lineStyle: { color: '#ffffff' } },
                 axisLabel: {
                     color: '#ffffff',
