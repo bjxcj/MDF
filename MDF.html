@@ -257,6 +257,19 @@
         return result;
     }
 
+    // 计算所有 series 的最大值（用于把标注对齐到 Y 轴顶部）
+    function computeGlobalMax() {
+        let max = -Infinity;
+        Object.keys(seriesData).forEach(k => {
+            const arr = seriesData[k] || [];
+            arr.forEach(v => {
+                if (typeof v === 'number' && v > max) max = v;
+            });
+        });
+        if (max === -Infinity) return 0;
+        return max;
+    }
+
     // 更新图表
     function updateChart() {
         const currentActivityData = seriesData[CURRENT_ACTIVITY];
@@ -273,39 +286,38 @@
                 data: seriesData[name]
             };
 
-            // 为当前活动添加标注
+            // 为当前活动添加标注（按用户要求：显示在左上角，X 对齐第一个节点，Y 对齐 Y 轴顶部）
             if (name === CURRENT_ACTIVITY && currentActivityData && currentActivityData.length > 0) {
-                const lastIndex = currentActivityData.length - 1;
-                const lastValue = currentActivityData[lastIndex];
-                const lastTime = times[lastIndex];
+                const firstX = times[0];
+                const topY = computeGlobalMax(); // 对齐到所有系列的最大值（Y 轴顶部附近）
                 const mobile = isMobile();
-
-                // 最后一个节点显示在上方，其他显示在右侧
-                const position = lastIndex >= (times.length - 4) ? 'insideBottomLeft' : 'insideTopRight';
-                const verticalAlign = position === 'insideBottomLeft' ? 'top' : 'bottom';
-                const align = position === 'insideBottomLeft' ? 'right' : 'left';
                 const activityColor = getColor(CURRENT_ACTIVITY);
+
                 s.markPoint = {
-                    symbol: 'circle',
-                    symbolSize: 0,
-                    label: {
-                        show: true,
-                        position: position,
-                        verticalAlign:verticalAlign,
-                        align: align,
-                        formatter: 'Cumulative MDF\n￥'+MDFsales,
-                        fontSize: mobile? 12:14,
-                        color:'#ffffff',
-                        backgroundColor: 'rgba(50,50,50,0.9)',
-                        borderColor: activityColor,
-                        borderWidth: 1,
-                        borderRadius: 2,
-                        padding: [2,5],
-                        distance:-5,
-                        lineHeight:mobile? 15:20
-                    },
                     data: [
-                        { type: 'max'}
+                        {
+                            // 将 coord 设置为第一个 x 类目和各系列最大值，强制放在左上角（靠近第一个 x 节点和 Y 顶部线）
+                            coord: [firstX, topY],
+                            value: topY,
+                            symbol: 'circle',
+                            symbolSize: 0, // 不显示点，只显示标签
+                            itemStyle: { color: activityColor },
+                            label: {
+                                show: true,
+                                // 放在点的左上方（chart 内部左上）
+                                position: 'insideTopLeft',
+                                formatter: `Cumulative MDF\n￥${MDFsales}`,
+                                fontSize: mobile ? 12 : 14,
+                                color: '#ffffff',
+                                backgroundColor: 'rgba(50,50,50,0.9)',
+                                borderColor: activityColor,
+                                borderWidth: 1,
+                                borderRadius: 4,
+                                padding: [4, 8],
+                                // 通过 offset 对像素级微调（向右、向下偏移一点，避免覆盖坐标轴线）
+                                offset: [8, 8]
+                            }
+                        }
                     ]
                 };
             }
